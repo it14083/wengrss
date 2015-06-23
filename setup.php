@@ -11,6 +11,7 @@
          $db = $_POST['db'];
          $pw = $_POST['pw'];
 
+         echo $user . $pw . $db;
          $mysqli = new mysqli("localhost",$user,$pw,$db);
 
          $query = "CREATE TABLE `feeds` (
@@ -30,9 +31,9 @@
                      `id` int(32) NOT NULL AUTO_INCREMENT,
                      `title` varchar(16) NOT NULL,
                      `url` varchar(64) NOT NULL,
- `                   feedid` int(32) NOT NULL,
- `                   description` varchar(512) NOT NULL,
- `                   content` varchar(8000) NOT NULL,
+ `                   'feedid` int(32) NOT NULL,
+ `                   'description` varchar(512) NOT NULL,
+ `                   'content` varchar(8000) NOT NULL,
                      `date` date NOT NULL,
                      `marked_read` tinyint(1) NOT NULL,
                      PRIMARY KEY (`id`)
