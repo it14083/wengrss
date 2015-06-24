@@ -1,12 +1,28 @@
 <?php
 
 	function db_connect() {
-		$mysqli = new mysqli("localhost","wengrss","qwer5t","wengrss");
+
+		if(!defined("DB_USER") || !defined("DB") || !defined("DB_PW")) {
+			read_db_config();
+		}
+
+		$mysqli = new mysqli("localhost",db_user,db_pw,db);
 		if($mysqli->connect_errno) {
 			echo $mysqli->connect_errno;
 			return false;
 		}
 		return $mysqli;
+	}
+
+	function read_db_config() {
+		$file = 'db.ini';
+		if($data = parse_ini_file($file)) {
+			define("DB_USER", $data['db_user']);
+			define("DB", $data['db']);
+			define("DB", $data['db_pw']);
+		} else {
+			echo "db config error";
+		}
 	}
 
 	function add_feed($mysqli,$owner,$url,$folder) {

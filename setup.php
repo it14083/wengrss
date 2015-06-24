@@ -11,7 +11,6 @@
          $db = $_POST['db'];
          $pw = $_POST['pw'];
 
-         echo $user . $pw . $db;
          $mysqli = new mysqli("localhost",$user,$pw,$db);
 
          $query = "CREATE TABLE `feeds` (
@@ -66,6 +65,14 @@
 
 			$mysqli->close();
 		}
+
+		$file = 'db.ini';
+		$handle = fopen($file, 'w') or die('Cannot open file: '. $file);
+		fwrite($handle, "db_user = " . $user . "\n");
+		fwrite($handle, "db = " . $db . "\n");
+		fwrite($handle, "db_pw = " . $pw);
+		fclose($handle);
+
 	}
 ?>
 <form action="setup.php" method="POST">
