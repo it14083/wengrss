@@ -1,12 +1,68 @@
 <?php
+	/*
+	$_Post ID: 
+		1: add_feed
+		2: add_feedentry
+		3: add_folder
+		
+		4: get_feedentry
+	
+	*/
+	if(isset($_POST['json'])){
+		
+		$daten = json_decode($_POST['json']);
+		$id = $daten[0];
+		
+		$return = 0;
+		switch ($id){
+			case 1:
+				$url = $daten[1];
+				if (filter_var($url, FILTER_VALIDATE_URL)) {
+					$return = 1;
+					$mysqli = db_connect();
+					add_feed($mysqli, "Philipp", $url, "Default");
+					getFeed_entries($url);
+				}
+			break;
+		}
+		
+		echo $return;
+	}
 
+	function getFeed_entries($feed_url){
+		$mysqli = db_connect();
+		$content = file_get_contents($feed_url);
+		$xmlElement = new SimpleXMLElement($content);
+		$id = get_id($feed_url);
+		
+		foreach($xmlElement->channel->item as $entry){
+			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,"Leer");
+		}
+	}
+	
+	function get_id($url){
+		$mysqli = db_connect();
+		$query = "SELECT id FROM feeds WHERE url='$url' and owner='Philipp'";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+			$stmt->bind_result($id);
+			if($stmt->fetch()){
+				return $id;
+			}
+			else{
+				return null;
+			}
+		}
+		$mysqli->close();
+	}
+		
 	function db_connect() {
 
 		if(!defined("DB_USER") || !defined("DB") || !defined("DB_PW")) {
 			read_db_config();
 		}
 
-		$mysqli = new mysqli("localhost",db_user,db_pw,db);
+		$mysqli = new mysqli("localhost","Philipp","12345","Feedreader");
 		if($mysqli->connect_errno) {
 			echo $mysqli->connect_errno;
 			return false;
