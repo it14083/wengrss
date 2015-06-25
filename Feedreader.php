@@ -1,10 +1,10 @@
 <html>
-	<head>
+	<head>		
 		<meta charset="utf-8">
 		<title>Feedreader</title>
 		<style>
 			#header{ color: black; text-align:center; padding:5px; height:10%;}
-			#menue { position:absolute; top:15%;line-height:30px; background-color:#F6F6F6; height:75%; width:200px; float:left; padding:5px;}
+			#menue { position:absolute; top:15%;line-height:30px; background-color:#F6F6F6; height:75%; width:250px; float:left; padding:5px;}
 			#main {position:absolute; height:75%; width:80%; float:left; padding:10px; left:20%; top:20%;overflow-y:scroll;}
 			#Navbar {position:absolute; height:5%; width:80%; float:left: padding:10px; left:20%; top:13%; }
 			#Artikel{ width:75%; margin-bottom:5px; }
@@ -13,6 +13,11 @@
 			#Buttons{width:20%; position:absolute; left:80%;}
 			#NavButtons{width:20%; position:absolute; left:76%; }
 			#gelb{background-color:#ff7f24;}
+			#Eingabe{width:90%; margin-left:4%;}
+			#Folder{width:90%; margin-top:2%; margin-left:4%;}
+			#EingabeButtons{position:absolute; width:100%; margin-top:2%;}
+			#Add{width:87%; margin-left:9%;}
+			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
 			
 		</style>
@@ -22,11 +27,10 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-	
 	</head>
+
 	
 	<body>
-		
 		<div id="wrapper">
 		
 			<div id="header">
@@ -34,6 +38,39 @@
 			</div>
 			
 			<div id="menue">
+				<span class='glyphicon glyphicon-plus' aria-hidden='true'></span><input id="Eingabe"></input></br>
+				<span class='glyphicon glyphicon-folder-open' aria-hidden='true'></span><input id="Folder"> </input></br>
+				<div id="EingabeButtons">
+					<button type='button' id="Add" class='btn btn-default' aria-label='Left Align'>
+							<span class='glyphicon glyphicon-plus' aria-hidden='true'></span> Add Content
+					</button>
+					<script>
+						$( "#EingabeButtons #Add" ).click(function() {
+							
+							
+							var url = document.getElementById("Eingabe").value;
+							//alert(document.getElementById("Eingabe").value);
+							
+							var feld = new Array("1", url);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									if(request.responseText == 0){
+										alert("Keine URL");
+									}
+									else{
+										alert("URL");
+									}
+								}
+							}
+							document.getElementById("Eingabe").value = "";
+						});
+					</script>
+				</div></br></br>
 				Alle anzeigen <br>
 				Ordner <br>
 				Archiv <br>

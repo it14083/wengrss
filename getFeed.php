@@ -1,20 +1,37 @@
 <?php
-	header("Content-Type: text/html; charset=utf-8");
+	//header("Content-Type: text/html; charset=utf-8");
+	include 'functions.php';
 	
-	$feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
-	$url =  "http://www.spiegel.de/schlagzeilen/tops/index.rss";
+$feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
+	//$url =  "http://www.spiegel.de/schlagzeilen/tops/index.rss";
 	
 	$derIndex = 0;
-	getFeed($url);
-	getFeed($feed_url);
+	printFeeds(10, 0);
+	//getFeed($url);
+	//getFeed($feed_url);
 	
-
+	//$mysqli = db_connect();
+	//add_feed($mysqli, "Philipp", $feed_url, "Default");
+	//add_feed($mysqli, "Philipp", $url, "Default");
+	
+	function printFeeds($limit, $read){
+		$mysqli = db_connect();
+		$query = "SELECT id, title, url, description FROM feed_entries Limit $limit";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+			$stmt->bind_result($id, $title, $url, $description);
+			while($stmt->fetch()){
+				echo $title;
+				echo "</br>";
+			}
+		}
+	}
 	function getFeed($feed_url){
 	
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
 	
-		$anzahlAusgabe = 10;
+		//$anzahlAusgabe = 10;
 		$derIndex = 0;
 		foreach($xmlElement->channel->item as $entry){
 			echo "<div id='Ausgabe' class='Ausgabe".$derIndex."'>\n";
@@ -52,15 +69,15 @@
 					
 					echo $entry->description ."<br>";
 					//echo $xmlElement->channel->item."<hr>";
-					$anzahlAusgabe--;
+					//$anzahlAusgabe--;
 				echo "</div>";
 			
 				echo "<br>";
 			echo "</div>";
-				if($anzahlAusgabe == 0){
+				/*if($anzahlAusgabe == 0){
 					break;
 				}
-			
+			*/
 		
 		}
 		
