@@ -1,5 +1,11 @@
+<html>
+	<head>	
+		<meta charset="utf-8">
+	</head>
+<body>
+
 <?php
-	//header("Content-Type: text/html; charset=utf-8");
+	
 	include 'functions.php';
 	
 $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
@@ -21,8 +27,47 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description);
 			while($stmt->fetch()){
-				echo $title;
-				echo "</br>";
+				echo "<div id='Ausgabe' class='Ausgabe".$id."'>\n";
+					echo "<a href='".$url."' title='".$title."'>" .$title ."</a>";
+					echo"<div id='Buttons'>";
+						echo"<button type='button' id='delete' class='btn btn-default' aria-label='Left Align'>";
+							echo"<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
+						echo"</button>";
+						echo"<button type='button' id='favorite' class='btn btn-default'  aria-label='Left Align'>";
+							echo"<span class='glyphicon glyphicon-star' aria-hidden='true'></span>";
+						echo"</button>";
+						?>
+				
+						<script>
+				
+						$( ".Ausgabe<?=$id?> #delete" ).click(function() {
+							//$( ".Ausgabe<?=$id?>" ).remove(".Ausgabe<?=$id?>");
+							var feld = new Array("2", <?=$id?>);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
+								}
+							}
+						});
+				
+						$( ".Ausgabe<?=$id?> #favorite" ).click(function() {
+							$( this ).css('color','rgb(255, 127, 36)');
+					
+						});
+						</script>
+						<?php
+					echo"</div>";
+	
+					echo "<div id='Artikel'>";					
+						echo $description ."<br>";
+					echo "</div>";
+					echo "<br>";
+				echo "</div>";
 			}
 		}
 	}
@@ -83,4 +128,5 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 		
 	}
 ?>
-	
+</body>
+</html>

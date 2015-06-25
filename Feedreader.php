@@ -1,5 +1,5 @@
 <html>
-	<head>		
+	<head>	
 		<meta charset="utf-8">
 		<title>Feedreader</title>
 		<style>
@@ -49,9 +49,10 @@
 							
 							
 							var url = document.getElementById("Eingabe").value;
+							var folder = document.getElementById("Folder").value;
 							//alert(document.getElementById("Eingabe").value);
 							
-							var feld = new Array("1", url);
+							var feld = new Array("1", url, folder);
 							data = JSON.stringify(feld);
 							var request = new XMLHttpRequest();
 							request.open('post', 'functions.php', true);
@@ -59,15 +60,12 @@
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
-									if(request.responseText == 0){
-										alert("Keine URL");
-									}
-									else{
-										alert("URL");
-									}
+									document.getElementById("Eingabe").value = "";
+									document.getElementById("Folder").value = "";
+									$("#main").load("getFeed.php");
 								}
 							}
-							document.getElementById("Eingabe").value = "";
+							
 						});
 					</script>
 				</div></br></br>

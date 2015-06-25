@@ -2,7 +2,7 @@
 	/*
 	$_Post ID: 
 		1: add_feed
-		2: add_feedentry
+		2: setRead
 		3: add_folder
 		
 		4: get_feedentry
@@ -12,18 +12,29 @@
 		
 		$daten = json_decode($_POST['json']);
 		$id = $daten[0];
-		
+		$mysqli = db_connect();
 		$return = 0;
 		switch ($id){
 			case 1:
+				$folder = $daten[2];
+				if($folder != Null){
+					add_folder($mysqli,"Philipp",$folder);
+				}
+				else{
+					$folder = "Default";
+				}
 				$url = $daten[1];
 				if (filter_var($url, FILTER_VALIDATE_URL)) {
 					$return = 1;
-					$mysqli = db_connect();
-					add_feed($mysqli, "Philipp", $url, "Default");
+					add_feed($mysqli, "Philipp", $url, $folder);
 					getFeed_entries($url);
 				}
-			break;
+				break;
+			
+			case 2:
+				$feed_id = $daten[1];
+				setRead($feed_id);
+				break;
 		}
 		
 		echo $return;
@@ -36,7 +47,15 @@
 		$id = get_id($feed_url);
 		
 		foreach($xmlElement->channel->item as $entry){
-			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,"Leer");
+			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$entry->pubDate);
+		}
+	}
+	
+	function setRead($feed_id){
+		$mysqli = db_connect();
+		$query = "UPDATE feed_entries SET marked_read='1' WHERE id='$feed_id'";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
 		}
 	}
 	
@@ -95,13 +114,13 @@
 		return false;
 	}
 
-	function add_feedentry($mysqli,$feedid,$title,$url,$description,$content) {
+	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date) {
 		$title = $mysqli->escape_string($title);
 		$url = $mysqli->escape_string($url);
 		$description = $mysqli->escape_string($description);
-		$content = $mysqli->escape_string($content);
+		$date = $mysqli->escape_string($date);
 
-		$query = "INSERT INTO feed_entries (feedid, title, url, description, content) VALUES('$feedid','$title','$url','$description','$content')";
+		$query = "INSERT INTO feed_entries (feedid, title, url, description, date) VALUES('$feedid','$title','$url','$description','$date')";
 		if($stmt = $mysqli->prepare($query)) {
 			if($stmt->execute()) {
 				return true;
