@@ -75,7 +75,7 @@
 		if($data = parse_ini_file($file)) {
 			define("DB_USER", $data['db_user']);
 			define("DB", $data['db']);
-			define("DB", $data['db_pw']);
+			define("DB_PW", $data['db_pw']);
 		} else {
 			echo "db config error";
 		}
