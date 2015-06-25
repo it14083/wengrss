@@ -6,13 +6,26 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 	//$url =  "http://www.spiegel.de/schlagzeilen/tops/index.rss";
 	
 	$derIndex = 0;
+	printFeeds(10, 0);
 	//getFeed($url);
-	getFeed($feed_url);
+	//getFeed($feed_url);
 	
 	//$mysqli = db_connect();
 	//add_feed($mysqli, "Philipp", $feed_url, "Default");
 	//add_feed($mysqli, "Philipp", $url, "Default");
-
+	
+	function printFeeds($limit, $read){
+		$mysqli = db_connect();
+		$query = "SELECT id, title, url, description FROM feed_entries Limit $limit";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+			$stmt->bind_result($id, $title, $url, $description);
+			while($stmt->fetch()){
+				echo $title;
+				echo "</br>";
+			}
+		}
+	}
 	function getFeed($feed_url){
 	
 		$content = file_get_contents($feed_url);
