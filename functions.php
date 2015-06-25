@@ -62,7 +62,7 @@
 			read_db_config();
 		}
 
-		$mysqli = new mysqli("localhost","Philipp","12345","Feedreader");
+		$mysqli = new mysqli("localhost",DB_USER,DB_PW,DB);
 		if($mysqli->connect_errno) {
 			echo $mysqli->connect_errno;
 			return false;
