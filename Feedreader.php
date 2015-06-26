@@ -70,35 +70,18 @@
 									document.getElementById("Eingabe").value = "";
 									document.getElementById("Folder").value = "";
 									$("#main").load("getFeed.php");
-									$("#Folder").refresh();
+									$("#menue #Folder").load("Folder.php");
 								}
 							}
 							
 						});
 					</script>
 				</div></br></br>
-				<div id="Folder">
+				<div id="Folder" class="list-group">
 					<?php
 					//Ausgabe der Ordner, Owner muss noch hinzugefügt werden
-					
-				
-					$mysqli = db_connect();
-					$query = "SELECT name FROM folders";
-					if($stmt = $mysqli->prepare($query)){
-						$stmt->execute();
-						$stmt->bind_result($folder);
-						echo "<ul>";
-						while($stmt->fetch()){
-							echo "<li>".$folder."</li>";
-							
-						}
-						echo"</ul>";
-					}
-				
-				
-				
-				
-				?>
+					include("Folder.php")
+					?>
 				</div>
 			</div>
 			<div id="Navbar">

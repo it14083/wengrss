@@ -153,14 +153,26 @@
 	function add_folder($mysqli,$owner,$folder) {
 		$owner = $mysqli->escape_string($owner);
 		$folder = $mysqli->escape_string($folder);
-
-		$query = "INSERT INTO folders (owner, name) VALUES ('$owner','$folder')";
-		if($stmt = $mysqli->prepare($query)) {
-			if($stmt->execute()) {
-				return true;
+		$nameTaken = 0;
+		if(ctype_alpha($folder)){
+			$query = "SELECT name FROM folders WHERE name='$folder' AND owner='$owner'";
+			if($stmt = $mysqli->prepare($query)) {
+				$stmt->execute();
+				$stmt->bind_result($name_taken);
+				if($stmt->fetch()) {
+					$nameTaken = 1;
+				}
+			}
+			if($nameTaken == 0){
+				$query = "INSERT INTO folders (owner, name) VALUES ('$owner','$folder')";
+				if($stmt = $mysqli->prepare($query)) {
+					if($stmt->execute()) {
+						return true;
+					}
+				}
+				return false;
 			}
 		}
-		return false;
 	}
 
 
