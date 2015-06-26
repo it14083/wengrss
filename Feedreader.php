@@ -1,5 +1,6 @@
 <html>
 	<head>	
+	
 		<meta charset="utf-8">
 		<title>Feedreader</title>
 		<style>
@@ -29,8 +30,14 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 	</head>
 
-	
+	<?php
+		session_start();
+		if(isset($_SESSION['uid'])){
+	?>
 	<body>
+		<?php
+			include 'functions.php';
+		?>
 		<div id="wrapper">
 		
 			<div id="header">
@@ -63,15 +70,36 @@
 									document.getElementById("Eingabe").value = "";
 									document.getElementById("Folder").value = "";
 									$("#main").load("getFeed.php");
+									$("#Folder").refresh();
 								}
 							}
 							
 						});
 					</script>
 				</div></br></br>
-				Alle anzeigen <br>
-				Ordner <br>
-				Archiv <br>
+				<div id="Folder">
+					<?php
+					//Ausgabe der Ordner, Owner muss noch hinzugefügt werden
+					
+				
+					$mysqli = db_connect();
+					$query = "SELECT name FROM folders";
+					if($stmt = $mysqli->prepare($query)){
+						$stmt->execute();
+						$stmt->bind_result($folder);
+						echo "<ul>";
+						while($stmt->fetch()){
+							echo "<li>".$folder."</li>";
+							
+						}
+						echo"</ul>";
+					}
+				
+				
+				
+				
+				?>
+				</div>
 			</div>
 			<div id="Navbar">
 				<div id="NavButtons">
@@ -121,6 +149,8 @@
 			</div>
 		</div>
 	</body>
-	
+	<?php
+		}
+	?>
 
 </html>

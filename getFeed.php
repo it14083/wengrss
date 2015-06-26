@@ -6,7 +6,7 @@
 
 <?php
 	
-	include 'functions.php';
+	require_once 'functions.php';
 	
 $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 	$url =  "http://www.spiegel.de/schlagzeilen/tops/index.rss";
