@@ -4,6 +4,7 @@
 </head>
 <body>
 <?php
+	
 	require_once("functions.php");
 
 	if(isset($_POST['name']) && isset($_POST['pw'])) {
@@ -14,10 +15,12 @@
 			session_start();
 			$_SESSION['uid'] = $_POST['name'];
 			echo $_SESSION['uid'] . " logged in";
+			header('Location: Feedreader.php');
+			exit(); 
 		}
 	
 		$mysqli->close();
-
+		
 	}
 ?>
 <form action="index.php" method="POST">

@@ -19,6 +19,9 @@
 
 			if(create_user($mysqli,$_POST['name'],$_POST['email'],$_POST['pw'])) {
 				echo $_POST['name'] . " erstellt";
+				add_folder($mysqli,$_POST['name'],"Default");
+				add_folder($mysqli,$_POST['name'],"Favoriten");
+				add_folder($mysqli,$_POST['name'],"Archiv");
 			} else {
 				echo "erstellen fehlgeschlagen";
 			}
