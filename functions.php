@@ -14,6 +14,7 @@
 		$id = $daten[0];
 		$mysqli = db_connect();
 		$return = 0;
+		
 		switch ($id){
 			case 1:
 				$folder = $daten[2];
@@ -43,8 +44,10 @@
 		}
 		
 		echo $return;
+	
 	}
 
+	
 	function getFeed_entries($feed_url, $owner, $folder){
 		$mysqli = db_connect();
 		$content = file_get_contents($feed_url);
@@ -122,7 +125,7 @@
 		$owner = $mysqli->escape_string($owner);
 		$url = $mysqli->escape_string($url);
 		$folder = $mysqli->escape_string($folder);
-
+		
 		$query="INSERT INTO feeds (owner, url, folder) VALUES('$owner','$url','$folder')";
 		if($stmt = $mysqli->prepare($query)) {
 			if($stmt->execute()) {

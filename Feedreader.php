@@ -58,7 +58,7 @@
 							var url = document.getElementById("Eingabe").value;
 							var folder = document.getElementById("Folder").value;
 							//alert(document.getElementById("Eingabe").value);
-							
+							alert(url);
 							var feld = new Array("1", url, folder);
 							data = JSON.stringify(feld);
 							var request = new XMLHttpRequest();
