@@ -24,7 +24,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 	
 	function printFeeds($limit, $read){
 		$mysqli = db_connect();
-		$query = "SELECT id, title, url, description FROM feed_entries Limit $limit";
+		$query = "SELECT id, title, url, description FROM feed_entries ORDER BY date Limit $limit";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description);
@@ -41,8 +41,25 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 						?>
 				
 						<script>
-				
+						
+						$( ".Ausgabe<?=$id?> #delete" ).ready(function() {
+							//Überprüfen, ob es als gelesen markiert ist. Falls ja, Farbe ändern
+							var feld = new Array("3", <?=$id?>);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									if(request.responseText == 1){
+										$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
+									}
+								}
+							}
+						});
 						$( ".Ausgabe<?=$id?> #delete" ).click(function() {
+							//als gelesen markieren und dann Farbe ändern
 							//$( ".Ausgabe<?=$id?>" ).remove(".Ausgabe<?=$id?>");
 							var feld = new Array("2", <?=$id?>);
 							data = JSON.stringify(feld);
@@ -58,6 +75,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 						});
 				
 						$( ".Ausgabe<?=$id?> #favorite" ).click(function() {
+							//Farbe des Sterns ändern
 							$( this ).css('color','rgb(255, 127, 36)');
 					
 						});

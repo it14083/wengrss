@@ -3,7 +3,7 @@
 	$_Post ID: 
 		1: add_feed
 		2: setRead
-		3: add_folder
+		3: getRead
 		
 		4: get_feedentry
 	
@@ -35,6 +35,11 @@
 				$feed_id = $daten[1];
 				setRead($feed_id);
 				break;
+				
+			case 3:
+				$feed_id = $daten[1];
+				$return = getRead($feed_id);
+				break;
 		}
 		
 		echo $return;
@@ -57,6 +62,18 @@
 		$query = "UPDATE feed_entries SET marked_read='1' WHERE id='$feed_id'";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
+		}
+	}
+	
+	function getRead($feed_id){
+		$mysqli = db_connect();
+		$query = "SELECT marked_read FROM feed_entries WHERE id='$feed_id'";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+			$stmt->bind_result($read);
+			if($stmt->fetch()){
+				return $read;
+			}
 		}
 	}
 	
