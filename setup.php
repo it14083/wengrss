@@ -15,9 +15,9 @@
 
          $query = "CREATE TABLE `feeds` (
                      `id` int(32) NOT NULL AUTO_INCREMENT,
-                     `owner` varchar(16) NOT NULL,
-                     `url` varchar(64) NOT NULL,
-                     `folder` varchar(16) NOT NULL,
+                     `owner` varchar(32) NOT NULL,
+                     `url` varchar(1024) NOT NULL,
+                     `folder` varchar(32) NOT NULL,
                      `lastupdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                      PRIMARY KEY (`id`) 
                   )  ENGINE=InnoDB DEFAULT CHARSET=utf8";
@@ -26,14 +26,16 @@
          }
 
 
-         $query = "CREATE TABLE `feed_entries` (
+		$query = "CREATE TABLE `feed_entries` (
                      `id` int(32) NOT NULL AUTO_INCREMENT,
-                     `title` varchar(16) NOT NULL,
-                     `url` varchar(64) NOT NULL,
+                     `title` varchar(256) NOT NULL,
+                     `url` varchar(1024) NOT NULL,
                      `feedid` int(32) NOT NULL,
-                     `description` varchar(512) NOT NULL,
+                     `description` varchar(1024) NOT NULL,
                      `content` varchar(8000) NOT NULL,
-                     `date` date NOT NULL,
+					 `owner` varchar(32) NOT NULL,
+					 `folder` varchar(32) NOT NULL,
+                     `date` datetime NOT NULL,
                      `marked_read` tinyint(1) NOT NULL,
                      PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
@@ -43,8 +45,8 @@
 
 
          $query = "CREATE TABLE `folders` (
-                     `owner` varchar(16) NOT NULL,
-                     `name` varchar(16) NOT NULL,
+                     `owner` varchar(32) NOT NULL,
+                     `name` varchar(32) NOT NULL,
                      `collapsed` tinyint(1) NOT NULL
                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
          if($stmt = $mysqli->prepare($query)) {
@@ -53,8 +55,8 @@
 
 
          $query = "CREATE TABLE `users` (
-                     `name` varchar(16) NOT NULL,
-                     `email` varchar(32) NOT NULL,
+                     `name` varchar(32) NOT NULL,
+                     `email` varchar(128) NOT NULL,
                      `password` varchar(64) NOT NULL,
                      `salt` varchar(32) NOT NULL
                   ) ENGINE=InnoDB DEFAULT CHARSET=utf8";

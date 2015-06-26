@@ -27,7 +27,7 @@
 				if (filter_var($url, FILTER_VALIDATE_URL)) {
 					$return = 1;
 					add_feed($mysqli, "Philipp", $url, $folder);
-					getFeed_entries($url);
+					getFeed_entries($url, "Philipp", $folder);
 				}
 				break;
 			
@@ -40,14 +40,15 @@
 		echo $return;
 	}
 
-	function getFeed_entries($feed_url){
+	function getFeed_entries($feed_url, $owner, $folder){
 		$mysqli = db_connect();
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
 		$id = get_id($feed_url);
 		
 		foreach($xmlElement->channel->item as $entry){
-			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$entry->pubDate);
+			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
+			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
 		}
 	}
 	
@@ -114,18 +115,21 @@
 		return false;
 	}
 
-	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date) {
+	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date, $owner, $folder) {
 		$title = $mysqli->escape_string($title);
 		$url = $mysqli->escape_string($url);
 		$description = $mysqli->escape_string($description);
 		$date = $mysqli->escape_string($date);
+		$owner = $mysqli->escape_string($owner);
+		$folder = $mysqli->escape_string($folder);
 
-		$query = "INSERT INTO feed_entries (feedid, title, url, description, date) VALUES('$feedid','$title','$url','$description','$date')";
+		$query = "INSERT INTO feed_entries (feedid, title, url, description, date, owner, folder) VALUES('$feedid','$title','$url','$description','$date','$owner','$folder')";
 		if($stmt = $mysqli->prepare($query)) {
 			if($stmt->execute()) {
 				return true;
 			}
 		}
+		echo $mysqli->error;
 		return false;
 	}
 
