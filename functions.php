@@ -229,6 +229,13 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 			}
 		}
 	}
+
+	function delete_folder($mysqli, $owner, $folder) {
+		$query = "DELETE FROM folders WHERE owner='$owner' AND name='$folder'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+	}
 	
 	function getFolder($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
