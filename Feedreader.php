@@ -37,6 +37,8 @@
 	<body>
 		<?php
 			include 'functions.php';
+			unset($_SESSION['folder']);
+			
 		?>
 		<div id="wrapper">
 		

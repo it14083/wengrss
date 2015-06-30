@@ -16,6 +16,7 @@
          $query = "CREATE TABLE `feeds` (
                      `id` int(32) NOT NULL AUTO_INCREMENT,
                      `owner` varchar(32) NOT NULL,
+					 `title` varchar(512) NOT NULL,
                      `url` varchar(1024) NOT NULL,
                      `folder` varchar(32) NOT NULL,
                      `lastupdated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

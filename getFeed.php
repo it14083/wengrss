@@ -25,7 +25,13 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 	
 	function printFeeds($limit, $read){
 		$mysqli = db_connect();
-		$query = "SELECT id, title, url, description FROM feed_entries ORDER BY date desc Limit $limit";
+		if(isset($_SESSION['folder'])){
+			$folder = $_SESSION['folder'];
+			$query = "SELECT id, title, url, description FROM feed_entries WHERE folder='$folder' ORDER BY date desc Limit $limit";
+		}
+		else{
+			$query = "SELECT id, title, url, description FROM feed_entries ORDER BY date desc Limit $limit";
+		}
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description);
