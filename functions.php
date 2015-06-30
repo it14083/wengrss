@@ -5,10 +5,11 @@
 		2: setRead
 		3: getRead
 		4: Folder Session
+		5: Update Feeds
 	
 	*/
 	if(isset($_POST['json'])){
-		
+		session_start();
 		$daten = json_decode($_POST['json']);
 		$id = $daten[0];
 		$mysqli = db_connect();
@@ -44,7 +45,13 @@
 			case 4:
 				//Ordner in SESSION packen
 				$folder = $daten[1];
+				unset($_SESSION['folder']);
 				getFolder($folder);
+				break;
+				
+			case 5:
+				updateFeeds();
+				$return = 1;
 				break;
 		}
 		
@@ -214,7 +221,7 @@
 	
 	function getFolder($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
-		$_SESSION['folder'] = $folder;
+		$_SESSION['folder'] = "Default";
 	}
 
 

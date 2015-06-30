@@ -24,6 +24,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 
 	
 	function printFeeds($limit, $read){
+		//echo $_SESSION['folder'];
 		$mysqli = db_connect();
 		if(isset($_SESSION['folder'])){
 			$folder = $_SESSION['folder'];

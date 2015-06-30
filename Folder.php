@@ -31,9 +31,23 @@
 				
 					$( "#Folder #<?=$folder?>" ).click(function() {
 						$("#Folder #URL-<?=$folder?>").slideToggle();
-						
+							derOrdner = $("#Folder #<?=$folder?>").attr("id");
+							var feld = new Array("4", derOrdner);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									//alert(request.responseText);
+									$("#document.body #main").load("getFeed.php");;
+								}
+							}
+							
 					});
 				});
+
 			
 			</script>
 			<?php
