@@ -41,6 +41,7 @@
 			//$_SESSION['folder'] =  "Bla";
 			unset($_SESSION['folder']);
 			unset($_SESSION['feed']);
+			updateFeeds();
 			
 		?>
 		<div id="wrapper">

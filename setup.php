@@ -38,6 +38,7 @@
 					 `folder` varchar(32) NOT NULL,
                      `date` datetime NOT NULL,
                      `marked_read` tinyint(1) NOT NULL,
+					 `marked_fav` tinyint(1) NOT NULL,
                      PRIMARY KEY (`id`)
                   ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
          if($stmt = $mysqli->prepare($query)) {

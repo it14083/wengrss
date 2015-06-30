@@ -91,10 +91,40 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 								}
 							}
 						});
-				
+						$( ".Ausgabe<?=$id?> #favorite" ).ready(function() {
+							//Überprüfen, ob es als gelesen markiert ist. Falls ja, Farbe ändern
+							var feld = new Array("8", <?=$id?>);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									//alert(request.responseText);
+									if(request.responseText == 1){
+										
+										$( ".Ausgabe<?=$id?> #favorite").css('color','rgb(255, 127, 36)');
+									}
+								}
+							}
+						});
+						
 						$( ".Ausgabe<?=$id?> #favorite" ).click(function() {
 							//Farbe des Sterns ändern
-							$( this ).css('color','rgb(255, 127, 36)');
+							var feld = new Array("7", <?=$id?>);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									//alert("ok");
+									$( ".Ausgabe<?=$id?> #favorite"  ).css('color','rgb(255, 127, 36)');
+								}
+							}
+							
 					
 						});
 						</script>

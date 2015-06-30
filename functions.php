@@ -7,6 +7,7 @@
 		4: Folder Session
 		5: Update Feeds
 		6: Feed Session
+		7: setFavorite
 	
 	*/
 	if(isset($_POST['json'])){
@@ -62,6 +63,16 @@
 				unset($_SESSION['feed']);
 				feedSession($feed);
 				break;
+			
+			case 7:
+				$idFav = $daten[1];
+				setFavorite($idFav);
+				break;
+			
+			case 8:
+				$idFav = $daten[1];
+				$return = getFavorite($idFav);
+				break;
 		}
 		
 		echo $return;
@@ -79,6 +90,26 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
 			if($date > $lastdate) {
 				add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
+			}
+		}
+	}
+	
+	function setFavorite($idFav){
+		$mysqli = db_connect();
+		$query = "UPDATE feed_entries SET marked_fav='1' WHERE id='$idFav'";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+		}
+	}
+	
+	function getFavorite($idFav){
+		$mysqli = db_connect();
+		$query = "SELECT marked_fav FROM feed_entries WHERE id='$idFav'";
+		if($stmt = $mysqli->prepare($query)){
+			$stmt->execute();
+			$stmt->bind_result($fav);
+			if($stmt->fetch()){
+				return $fav;
 			}
 		}
 	}
