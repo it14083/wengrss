@@ -45,8 +45,10 @@
 			case 4:
 				//Ordner in SESSION packen
 				$folder = $daten[1];
+				
 				unset($_SESSION['folder']);
 				getFolder($folder);
+				echo $_SESSION['folder'];
 				break;
 				
 			case 5:
@@ -220,7 +222,7 @@
 	
 	function getFolder($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
-		$_SESSION['folder'] = "Default";
+		$_SESSION['folder'] = $folder;
 	}
 
 

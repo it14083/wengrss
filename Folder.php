@@ -4,7 +4,11 @@
 	//Ausgabe der Ordner, Owner muss noch hinzugefügt werden		
 				
 	$mysqli = db_connect();
-	$query = "SELECT name FROM folders";
+	if(session_status() == PHP_SESSION_NONE){
+			session_start();
+	}
+	$owner = $_SESSION['uid'];
+	$query = "SELECT name FROM folders WHERE owner='$owner'";
 	if($stmt = $mysqli->prepare($query)){
 		$stmt->execute();
 		$stmt->bind_result($folder);
@@ -13,7 +17,7 @@
 			echo "<div id='URL-$folder'>";
 				echo"<p>";
 					$mysqlURL = db_connect();
-					$queryFeeds = "SELECT title FROM feeds WHERE folder='$folder'";
+					$queryFeeds = "SELECT title FROM feeds WHERE folder='$folder' and owner='$owner'";
 					if($stmtURL = $mysqlURL->prepare($queryFeeds)){
 						$stmtURL->execute();
 						$stmtURL->bind_result($url);
@@ -40,8 +44,7 @@
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
-									//alert(request.responseText);
-									$("#document.body #main").load("getFeed.php");;
+									$("#main").load("getFeed.php");;
 								}
 							}
 							

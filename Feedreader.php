@@ -37,7 +37,7 @@
 	<body>
 		<?php
 			include 'functions.php';
-			//echo ($_SESSION['folder']);
+			//$_SESSION['folder'] =  "Bla";
 			unset($_SESSION['folder']);
 			
 		?>
@@ -129,7 +129,7 @@
 							if (request.readyState==4 && request.status==200){
 								alert(request.responseText);
 								
-								//$("#main").load("getFeed.php");
+								//$("document.body #main").load("getFeed.php");
 							}
 						}
 					});

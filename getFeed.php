@@ -24,14 +24,17 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 
 	
 	function printFeeds($limit, $read){
-		//echo $_SESSION['folder'];
+		if(session_status() == PHP_SESSION_NONE){
+			session_start();
+		}
+		$owner = $_SESSION['uid'];
 		$mysqli = db_connect();
 		if(isset($_SESSION['folder'])){
 			$folder = $_SESSION['folder'];
-			$query = "SELECT id, title, url, description FROM feed_entries WHERE folder='$folder' ORDER BY date desc Limit $limit";
+			$query = "SELECT id, title, url, description FROM feed_entries WHERE folder='$folder' AND owner='$owner' ORDER BY date desc Limit $limit";
 		}
 		else{
-			$query = "SELECT id, title, url, description FROM feed_entries ORDER BY date desc Limit $limit";
+			$query = "SELECT id, title, url, description FROM feed_entries WHERE owner='$owner' ORDER BY date desc Limit $limit";
 		}
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
