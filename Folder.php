@@ -17,13 +17,16 @@
 			echo "<div id='URL-$folder'>";
 				echo"<p>";
 					$mysqlURL = db_connect();
-					$queryFeeds = "SELECT title FROM feeds WHERE folder='$folder' and owner='$owner'";
+					$queryFeeds = "SELECT title, id FROM feeds WHERE folder='$folder' and owner='$owner'";
 					if($stmtURL = $mysqlURL->prepare($queryFeeds)){
 						$stmtURL->execute();
-						$stmtURL->bind_result($url);
+						$stmtURL->bind_result($title, $id);
 						
 						while($stmtURL->fetch()){
-							echo $url;
+							echo "<button type='button' class='list-group-item' name= 'FeedButton' id='$id'>".$title."</button>";
+						
+							//echo $title;
+							//echo $id;
 						}
 					}
 				echo "</p>";

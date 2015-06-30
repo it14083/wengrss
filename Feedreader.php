@@ -18,6 +18,7 @@
 			#Folder{width:90%; margin-top:2%; margin-left:4%;}
 			#EingabeButtons{position:absolute; width:100%; margin-top:2%;}
 			#Add{width:87%; margin-left:9%;}
+			.FeedButton{margin-left:12%;}
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
 			
