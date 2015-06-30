@@ -105,10 +105,6 @@
 		
 	function db_connect() {
 
-		if(!isset($_SESSION['uid'])) {
-			header("Location: index.php");
-		}
-
 		if(!defined("DB_USER") || !defined("DB") || !defined("DB_PW")) {
 			read_db_config();
 		}
