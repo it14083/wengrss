@@ -48,7 +48,7 @@
 	}
 
 	
-	function getFeed_entries($feed_url, $owner, $folder){
+	function getFeed_entries($feed_url, $owner, $folder, $lastdate){
 		$mysqli = db_connect();
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
@@ -56,6 +56,7 @@
 		
 		foreach($xmlElement->channel->item as $entry){
 			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
+			echo $lastdate . $date;
 			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
 		}
 	}
@@ -114,6 +115,26 @@
 		}
 		return $mysqli;
 	}
+
+
+	function updateFeeds() {
+		$mysqli = db_connect();
+		$owner = $_SESSION['uid'];
+		$query = "SELECT url,folder,date FROM feeds where owner='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($url, $folder, $date);
+			while($stmt->fetch()) {
+				getFeed_entries($url, $owner, $folder, $date);
+			}
+		}
+
+		$query = "UPDATE lastupdated FROM feeds WHERE owner='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+	}
+
 
 	function read_db_config() {
 		$file = 'db.ini';
