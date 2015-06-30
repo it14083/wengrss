@@ -127,9 +127,7 @@
 						request.send('json='+data);
 						request.onreadystatechange = function() {
 							if (request.readyState==4 && request.status==200){
-								alert(request.responseText);
-								
-								//$("document.body #main").load("getFeed.php");
+								$("#main").load("getFeed.php");
 							}
 						}
 					});
