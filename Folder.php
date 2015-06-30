@@ -13,7 +13,7 @@
 			echo "<div id='URL-$folder'>";
 				echo"<p>";
 					$mysqlURL = db_connect();
-					$queryFeeds = "SELECT url FROM feeds WHERE folder='$folder'";
+					$queryFeeds = "SELECT title FROM feeds WHERE folder='$folder'";
 					if($stmtURL = $mysqlURL->prepare($queryFeeds)){
 						$stmtURL->execute();
 						$stmtURL->bind_result($url);
@@ -31,6 +31,7 @@
 				
 					$( "#Folder #<?=$folder?>" ).click(function() {
 						$("#Folder #URL-<?=$folder?>").slideToggle();
+						
 					});
 				});
 			

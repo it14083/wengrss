@@ -4,8 +4,7 @@
 		1: add_feed
 		2: setRead
 		3: getRead
-		
-		4: get_feedentry
+		4: Folder Session
 	
 	*/
 	if(isset($_POST['json'])){
@@ -40,6 +39,12 @@
 			case 3:
 				$feed_id = $daten[1];
 				$return = getRead($feed_id);
+				break;
+			
+			case 4:
+				//Ordner in SESSION packen
+				$folder = $daten[1];
+				getFolder($folder);
 				break;
 		}
 		
@@ -126,7 +131,13 @@
 		$url = $mysqli->escape_string($url);
 		$folder = $mysqli->escape_string($folder);
 		
-		$query="INSERT INTO feeds (owner, url, folder) VALUES('$owner','$url','$folder')";
+		$content = file_get_contents($url);
+		$xmlElement = new SimpleXMLElement($content);
+		
+		
+		$title = $xmlElement->channel->title;
+		
+		$query="INSERT INTO feeds (owner, url, folder, title) VALUES('$owner','$url','$folder', '$title')";
 		if($stmt = $mysqli->prepare($query)) {
 			if($stmt->execute()) {
 				return true;
@@ -176,6 +187,11 @@
 				return false;
 			}
 		}
+	}
+	
+	function getFolder($folder){
+		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
+		$_SESSION['folder'] = $folder;
 	}
 
 
