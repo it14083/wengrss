@@ -19,7 +19,7 @@
 			case 1:
 				$folder = $daten[2];
 				if($folder != Null){
-					add_folder($mysqli,"Philipp",$folder);
+					add_folder($mysqli,$_SESSION['uid'],$folder);
 				}
 				else{
 					$folder = "Default";
@@ -27,8 +27,8 @@
 				$url = $daten[1];
 				if (filter_var($url, FILTER_VALIDATE_URL)) {
 					$return = 1;
-					add_feed($mysqli, "Philipp", $url, $folder);
-					getFeed_entries($url, "Philipp", $folder);
+					add_feed($mysqli, $_SESSION['uid'], $url, $folder);
+					getFeed_entries($url, $_SESSION['uid'], $folder);
 				}
 				break;
 			
@@ -82,7 +82,8 @@
 	
 	function get_id($url){
 		$mysqli = db_connect();
-		$query = "SELECT id FROM feeds WHERE url='$url' and owner='Philipp'";
+		$owner = $_SESSION['uid'];
+		$query = "SELECT id FROM feeds WHERE url='$url' and owner='$owner'";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id);
@@ -97,6 +98,10 @@
 	}
 		
 	function db_connect() {
+
+		if(!isset($_SESSION['uid'])) {
+			header("Location: index.php");
+		}
 
 		if(!defined("DB_USER") || !defined("DB") || !defined("DB_PW")) {
 			read_db_config();
