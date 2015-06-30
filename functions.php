@@ -180,6 +180,13 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		return false;
 	}
 
+	function delete_feed($mysqli, $feedid) {
+		$query = "DELETE FROM feeds WHERE id='$feedid'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+	}
+
 	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date, $owner, $folder) {
 		$title = $mysqli->escape_string($title);
 		$url = $mysqli->escape_string($url);
