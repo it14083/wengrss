@@ -37,6 +37,7 @@
 	<body>
 		<?php
 			include 'functions.php';
+			//echo ($_SESSION['folder']);
 			unset($_SESSION['folder']);
 			
 		?>
@@ -118,7 +119,19 @@
 				
 					<script>
 					$( "#NavButtons #refresh" ).click(function() {
-						$("#main").load("getFeed.php");
+						var feld = new Array("5");
+						data = JSON.stringify(feld);
+						var request = new XMLHttpRequest();
+						request.open('post', 'functions.php', true);
+						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+						request.send('json='+data);
+						request.onreadystatechange = function() {
+							if (request.readyState==4 && request.status==200){
+								alert(request.responseText);
+								
+								//$("#main").load("getFeed.php");
+							}
+						}
 					});
 					</script>
 				</div>
