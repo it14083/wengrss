@@ -60,7 +60,7 @@
 	}
 
 	
-	function getFeed_entries($feed_url, $owner, $folder, $lastdate){
+function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		$mysqli = db_connect();
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
@@ -68,7 +68,9 @@
 
 		foreach($xmlElement->channel->item as $entry){
 			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
-			add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
+			if($date > $lastdate) {
+				add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
+			}
 		}
 	}
 	
@@ -138,7 +140,7 @@
 			echo $mysqli->error;
 		}
 
-		$query = "UPDATE lastupdated FROM feeds WHERE owner='$owner'";
+		$query = "UPDATE feeds SET lastupdated=now() WHERE owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
