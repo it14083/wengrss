@@ -6,6 +6,7 @@
 		3: getRead
 		4: Folder Session
 		5: Update Feeds
+		6: Feed Session
 	
 	*/
 	if(isset($_POST['json'])){
@@ -45,15 +46,21 @@
 			case 4:
 				//Ordner in SESSION packen
 				$folder = $daten[1];
-				
+				unset($_SESSION['feed']);
 				unset($_SESSION['folder']);
-				getFolder($folder);
-				echo $_SESSION['folder'];
+				folderSession($folder);
 				break;
 				
 			case 5:
 				updateFeeds();
 				$return = 1;
+				break;
+				
+			case 6:
+				$feed = $daten[1];
+				unset($_SESSION['folder']);
+				unset($_SESSION['feed']);
+				feedSession($feed);
 				break;
 		}
 		
@@ -237,9 +244,13 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		}
 	}
 	
-	function getFolder($folder){
+	function folderSession($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
 		$_SESSION['folder'] = $folder;
+	}
+	
+	function feedSession($feed){
+		$_SESSION['feed'] = $feed;
 	}
 
 

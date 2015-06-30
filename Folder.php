@@ -24,6 +24,25 @@
 						
 						while($stmtURL->fetch()){
 							echo "<button type='button' class='list-group-item' name= 'FeedButton' id='$id'>".$title."</button>";
+							?>
+							<script>
+								$("#URL-<?=$folder?> #<?=$id?>").click(function(){
+									derFeed = $("#URL-<?=$folder?> #<?=$id?>").attr("id");
+									var feld = new Array("6", derFeed);
+									data = JSON.stringify(feld);
+									var request = new XMLHttpRequest();
+									request.open('post', 'functions.php', true);
+									request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+									request.send('json='+data);
+									request.onreadystatechange = function() {
+										if (request.readyState==4 && request.status==200){
+											$("#main").load("getFeed.php");;
+										}
+									}
+					
+								});
+							</script>
+							<?php
 						
 							//echo $title;
 							//echo $id;
@@ -52,6 +71,7 @@
 							}
 							
 					});
+					
 				});
 
 			
