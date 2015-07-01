@@ -7,6 +7,11 @@
 	
 	require_once("functions.php");
 
+	if(!file_exists("db.ini")) {
+		header('Location: setup.php');
+		exit();
+	}
+
 	if(isset($_POST['name']) && isset($_POST['pw'])) {
 		if(!$mysqli = db_connect())
 			return;

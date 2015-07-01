@@ -21,11 +21,14 @@
 				echo $_POST['name'] . " erstellt";
 				add_folder($mysqli,$_POST['name'],"Default");
 				add_folder($mysqli,$_POST['name'],"Favoriten");
+				$mysqli->close();
+				header('Location: index.php');
+				exit();
 			} else {
 				echo "erstellen fehlgeschlagen";
+				$mysqli->close();
 			}
 
-			$mysqli->close();
 		}
 	}
 ?>

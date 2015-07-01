@@ -77,6 +77,9 @@
 		fwrite($handle, "db_pw = " . $pw);
 		fclose($handle);
 
+		header('Location: register.php');
+		exit();
+
 	}
 ?>
 <form action="setup.php" method="POST">
