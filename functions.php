@@ -85,12 +85,24 @@
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
 		$id = get_id($feed_url);
+		$youngest = $lastdate;
 
 		foreach($xmlElement->channel->item as $entry){
 			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
 			if($date > $lastdate) {
 				add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
 			}
+			if($date > $youngest) {
+				$youngest = $date;
+			}
+		}
+		update_lastupdated($mysqli,$id,$youngest);
+	}
+
+	function update_lastupdated($mysqli,$id,$date) {
+		$query = "UPDATE feeds SET lastupdated='$date' WHERE id='$id'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
 		}
 	}
 
@@ -248,10 +260,7 @@
 			echo $mysqli->error;
 		}
 
-		$query = "UPDATE feeds SET lastupdated=now() WHERE owner='$owner'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		}
+		
 	}
 
 
