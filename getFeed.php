@@ -30,7 +30,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 		$owner = $_SESSION['uid'];
 		$mysqli = db_connect();
 		
-		if(isset($_SESSION['feed'])){
+		/*if(isset($_SESSION['feed'])){
 			$feedID = $_SESSION['feed'];
 			$query = "SELECT id, title, url, description FROM feed_entries WHERE feedid='$feedID' AND owner='$owner' ORDER BY date desc Limit $limit";
 		}
@@ -42,7 +42,10 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 			else{
 				$query = "SELECT id, title, url, description FROM feed_entries WHERE owner='$owner' ORDER BY date desc Limit $limit";
 			}
-		}
+		}*/
+
+		$query = build_query_select_feeds();
+
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description);

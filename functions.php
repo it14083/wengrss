@@ -107,7 +107,33 @@
 			$stmt->execute();
 		}
 	}
-	
+
+	function build_query_select_feeds() {
+		$owner = $_SESSION['uid'];
+		$feedid = "";
+		$folder = "";
+		$read = "AND marked_read='0'";
+		$limit = $_SESSION['articles_per_page'];
+
+		if(isset($_SESSION['feed'])) {
+			$feedid = $_SESSION['feed'];
+			$feedid = "AND feedid='$feedid'";
+		}
+
+		if(isset($_SESSION['folder'])) {
+			$folder = $_SESSION['folder'];
+			$folder = "AND folder='$folder'";
+		}
+
+		if($_SESSION['show_all'])
+			$read = "";
+
+		$query = "SELECT id,title,url,description FROM feed_entries WHERE owner='$owner' $feedid $folder $read  ORDER BY date desc Limit $limit";
+
+		return $query;
+	}
+
+
 	function setFavorite($idFav){
 		$mysqli = db_connect();
 		$query = "UPDATE feed_entries SET marked_fav='1' WHERE id='$idFav'";
