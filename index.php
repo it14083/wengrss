@@ -20,6 +20,7 @@
 			session_start();
 			$_SESSION['uid'] = $_POST['name'];
 			load_settings($mysqli,$_SESSION['uid']);
+			delete_feed($mysqli,4);
 			header('Location: Feedreader.php');
 			exit(); 
 		}

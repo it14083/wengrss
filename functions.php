@@ -138,6 +138,17 @@
 		return $query;
 	}
 
+	function delete_feed($mysqli, $id) {
+		$query = "DELETE FROM feeds WHERE id='$id'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$query = "DELETE FROM feed_entries WHERE feedid='$id'";
+			if($stmt = $mysqli->prepare($query)) {
+				$stmt->execute();
+			}
+		}
+	}
+
 
 	function setFavorite($idFav){
 		$mysqli = db_connect();
@@ -261,13 +272,6 @@
 			}
 		}
 		return false;
-	}
-
-	function delete_feed($mysqli, $feedid) {
-		$query = "DELETE FROM feeds WHERE id='$feedid'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		}
 	}
 
 	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date, $owner, $folder) {
