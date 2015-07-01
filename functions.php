@@ -119,7 +119,7 @@
 	}
 
 	function move_to_folder($mysqli, $id, $folder) {
-		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
+		$query = "UPDATE feed_entries SET folder='$folder' WHERE id='$id'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
