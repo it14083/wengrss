@@ -253,6 +253,14 @@
 	function updateFeeds() {
 		$mysqli = db_connect();
 		$owner = $_SESSION['uid'];
+
+		$ttl = $_SESSION['ttl'];
+		$oldest = strftime("%Y-%m-%d %H:%M:%S", strtotime("-$ttl day"));
+		$query = "DELETE FROM feed_entries WHERE owner='$owner' AND date<'$oldest'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+
 		$query = "SELECT url,folder,lastupdated FROM feeds where owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
