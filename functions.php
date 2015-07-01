@@ -256,7 +256,7 @@
 
 		$ttl = $_SESSION['ttl'];
 		$oldest = strftime("%Y-%m-%d %H:%M:%S", strtotime("-$ttl day"));
-		$query = "DELETE FROM feed_entries WHERE owner='$owner' AND date<'$oldest'";
+		$query = "DELETE FROM feed_entries WHERE owner='$owner' AND date<'$oldest' AND marked_fav='0'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
