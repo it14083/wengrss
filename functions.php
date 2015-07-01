@@ -73,6 +73,10 @@
 				$idFav = $daten[1];
 				$return = getFavorite($idFav);
 				break;
+
+			case 9:
+				mark_page_read($mysqli);
+				break;
 		}
 		
 		echo $return;

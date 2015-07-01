@@ -98,12 +98,18 @@
 					
 					<script>
 						$( "#NavButtons #allRead" ).click(function() {
-							//Variable aus PHP übergeben für Anzahl Feeds
-							var i = 0;
-							while(i <= 10){
-								$( ".Ausgabe"+i).remove(".Ausgabe"+i);
-								i++;
+							var feld = new Array("9");
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									$("#main").load("getFeed.php");
+								}
 							}
+
 						});
 					</script>
 					<button type='button' id="refresh" class='btn btn-default' aria-label='Left Align' onclick='refresh();'>
