@@ -324,6 +324,9 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 			$stmt->execute();
 		}
 
+		add_folder($mysqli, $name, "Default");
+		add_folder($mysqli, $name, "Favoriten");
+
 		return true;
 
 	}
