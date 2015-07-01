@@ -347,6 +347,21 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		return false;
 	}
 
+	function load_settings($mysqli,$name) {
+		$query = "SELECT time_to_live,articles_per_page,show_all FROM settings WHERE owner='$name'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($ttl,$app,$show_all);
+			if($stmt->fetch()) {
+				$_SESSION['ttl'] = $ttl;
+				$_SESSION['articles_per_page'] = $app;
+				$_SESSION['show_all'] = $show_all;
+			}
+		} else {
+			echo $mysqli->error;
+		}
+	}
+
 	function encrypt_password($pw, $salt) {
 		return hash('sha256',$pw . $salt);
 	}

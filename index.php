@@ -19,7 +19,7 @@
 		if(login_user($mysqli, $_POST['name'], $_POST['pw'])) {
 			session_start();
 			$_SESSION['uid'] = $_POST['name'];
-			echo $_SESSION['uid'] . " logged in";
+			load_settings($mysqli,$_SESSION['uid']);
 			header('Location: Feedreader.php');
 			exit(); 
 		}
