@@ -317,11 +317,15 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		$query = "INSERT INTO users VALUE ('$name','$email','$pw_hash','$salt')";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
-
-			return true;
 		}
 
-		return false;
+		$query = "INSERT INTO settings (owner) VALUES ('$name')";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+
+		return true;
+
 	}
 
 	function login_user($mysqli,$name,$pw) {

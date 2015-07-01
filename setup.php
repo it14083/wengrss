@@ -67,7 +67,19 @@
          }
 
 
+			$query = "CREATE TABLE `settings` (
+ 					`owner` varchar(16) NOT NULL,
+  					`time_to_live` smallint(6) NOT NULL DEFAULT '14',
+   					`articles_per_page` tinyint(4) NOT NULL DEFAULT '10',
+    				`show_all` tinyint(1) NOT NULL DEFAULT '0'
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+			if($stmt = $mysqli->prepare($query)) {
+				$stmt->execute();
+			}
+
+
 			$mysqli->close();
+
 		}
 
 		$file = 'db.ini';
