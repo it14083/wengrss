@@ -80,7 +80,7 @@
 	}
 
 	
-function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
+	function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 		$mysqli = db_connect();
 		$content = file_get_contents($feed_url);
 		$xmlElement = new SimpleXMLElement($content);
@@ -91,6 +91,13 @@ function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
 			if($date > $lastdate) {
 				add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
 			}
+		}
+	}
+
+	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all) {
+		$query = "UPDATE settings SET time_to_live='$ttl', articles_per_page='$articles_per_page', show_all='$show_all' WHERE owner='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
 		}
 	}
 	
