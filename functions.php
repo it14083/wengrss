@@ -95,6 +95,11 @@
 	}
 
 	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all) {
+
+		$_SESSION['ttl'] = $ttl;
+		$_SESSION['articles_per_page'] = $articles_per_page;
+		$_SESSION['show_all'] = $show_all;
+
 		$query = "UPDATE settings SET time_to_live='$ttl', articles_per_page='$articles_per_page', show_all='$show_all' WHERE owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
