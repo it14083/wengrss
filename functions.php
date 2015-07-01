@@ -94,6 +94,18 @@
 		}
 	}
 
+	function mark_page_read($mysqli) {
+		$query = build_query_select_feeds();
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($id,$title,$url,$desc);
+			while($stmt->fetch()) {
+				setRead($id);
+			}
+		}
+
+	}
+
 	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all) {
 
 		$_SESSION['ttl'] = $ttl;
