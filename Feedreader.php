@@ -18,6 +18,10 @@
 			#Folder{width:90%; margin-top:2%; margin-left:4%;}
 			#EingabeButtons{position:absolute; width:100%; margin-top:2%;}
 			#Add{width:87%; margin-left:9%;}
+			#ttLive, #anzFeeds{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
+			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
+			#saveSettings{width:80%; margin-left:5%; margin-top:10%;}
+			
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
@@ -120,13 +124,53 @@
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<li><a href="#"></a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else here</a></li>
-							<li><a href="#">Separated link</a></li>
+							<li>Unread only <input type="checkbox" id="checkRead"></input></li>
+							<li>Show Feeds <input type="text" id="anzFeeds" value="<?=$_SESSION['articles_per_page'] ?>"> </input></li>
+							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
+							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
 						</ul>
 				
 					<script>
+					$( "#NavButtons #checkRead" ).ready(function() {
+						<?php
+							if($_SESSION['show_all'] == 1){
+								?>
+								document.getElementById("checkRead").checked=false;
+								<?php
+							}
+							else{
+								?>
+								document.getElementById("checkRead").checked=true;
+								<?php
+							}
+						?>
+						
+					});
+					$( "#NavButtons #saveSettings" ).click(function() {
+						var checked = document.getElementById("checkRead").checked;
+						if(checked){
+							checked = 0;
+						}
+						else{
+							checked = 1;
+						}
+						var ttl = document.getElementById("ttLive").value;
+						var anzFeeds = document.getElementById("anzFeeds").value;
+						
+						var feld = new Array("10", checked, ttl, anzFeeds);
+						data = JSON.stringify(feld);
+						var request = new XMLHttpRequest();
+						request.open('post', 'functions.php', true);
+						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+						request.send('json='+data);
+						request.onreadystatechange = function() {
+							if (request.readyState==4 && request.status==200){
+								//alert(request.responseText);
+								$("#main").load("getFeed.php");
+							}
+						}
+						
+					});
 					$( "#NavButtons #refresh" ).click(function() {
 						var feld = new Array("5");
 						data = JSON.stringify(feld);

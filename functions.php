@@ -8,6 +8,9 @@
 		5: Update Feeds
 		6: Feed Session
 		7: setFavorite
+		8: getFavorite
+		9: mark Read
+		10: updateSettings
 	
 	*/
 	if(isset($_POST['json'])){
@@ -77,6 +80,21 @@
 			case 9:
 				mark_page_read($mysqli);
 				break;
+			
+			case 10:
+				$checked = $daten[1];
+				$ttl = 14;
+				$anzFeeds = 10;
+				if(is_numeric($daten[2])){
+					$ttl = $daten[2];
+				}
+				if(is_numeric($daten[3])){
+					$anzFeeds = $daten[3];
+				}
+				update_settings($mysqli, $_SESSION['uid'], $ttl, $anzFeeds, $checked);
+				//echo $ttl;
+				break;
+				
 		}
 		
 		echo $return;
