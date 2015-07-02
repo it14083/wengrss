@@ -101,19 +101,45 @@
 	
 	}
 
-	
-	function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0){
-		$mysqli = db_connect();
-		$content = file_get_contents($feed_url);
-		$xmlElement = new SimpleXMLElement($content);
+	function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0) {
 		$id = get_id($feed_url);
 		$youngest = $lastdate;
 
-		foreach($xmlElement->channel->item as $entry){
-			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($entry->pubDate));
-			if($date > $lastdate) {
-				add_feedentry($mysqli,$id,$entry->title,$entry->link,$entry->description,$date, $owner, $folder);
+		$mysqli = db_connect();
+
+		$xml = new DOMDocument("1.0");
+		$xml->load($feed_url);
+
+		$atom = $xml->getElementsByTagName("feed");
+		$item_tag = "item";
+		$summary_tag = "description";
+		$date_tag = "pubDate";
+
+		if($atom->length > 0) {
+			$item_tag = "entry";
+			$summary_tag = "summary";
+			$date_tag = "published";
+		}
+
+		$items = $xml->getElementsByTagName($item_tag);
+		foreach($items as $item) {
+			$title = extract_data($item->getElementsByTagName("title"));
+			$summary = extract_data($item->getElementsByTagName($summary_tag));
+			$link = $item->getElementsByTagName("link");
+			if($atom->length > 0) {
+				$link = $link->item(0);
+				$link = $link->getAttribute("href");
+			} else {
+				$link = extract_data($link);
 			}
+
+			$date = extract_data($item->getElementsByTagName($date_tag));
+			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($date));
+
+			if($date > $lastdate) {
+				add_feedentry($mysqli,$id,$title,$link,$summary,$date,$owner,$folder);
+			}
+
 			if($date > $youngest) {
 				$youngest = $date;
 			}
@@ -121,6 +147,13 @@
 		update_lastupdated($mysqli,$id,$youngest);
 	}
 
+	function extract_data($item) {
+		$tmp = $item->item(0);
+		$tmp = $tmp->firstChild->textContent;
+		return $tmp;
+	}
+
+	
 	function update_lastupdated($mysqli,$id,$date) {
 		$query = "UPDATE feeds SET lastupdated='$date' WHERE id='$id'";
 		if($stmt = $mysqli->prepare($query)) {
