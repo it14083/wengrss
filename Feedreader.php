@@ -5,8 +5,8 @@
 		<title>Feedreader</title>
 		<style>
 			#header{ color: black; text-align:center; padding:5px; height:10%;}
-			#menue { position:absolute; top:15%;line-height:30px; background-color:#F6F6F6; height:75%; width:250px; float:left; padding:5px;}
-			#main {position:absolute; height:75%; width:80%; float:left; padding:10px; left:20%; top:20%;overflow-y:scroll;}
+			#menue { position:absolute; top:2%;line-height:30px; background-color:#F6F6F6; height:98%; width:20%; float:left; padding:5px; overflow-y:scroll; overflow-x:hidden;}
+			#main {position:absolute; height:75%; width:75%; float:left; padding:10px; left:23%; top:20%;overflow-y:scroll;}
 			#Navbar {position:absolute; height:5%; width:80%; float:left: padding:10px; left:20%; top:13%; }
 			#Artikel{ width:75%; margin-bottom:5px; }
 			#footer{position:fixed; bottom:1%; left:0px; right:0px; color: black; text-align:center; clear:both;} 
@@ -51,7 +51,7 @@
 		<div id="wrapper">
 		
 			<div id="header">
-				<h1>Feedreader</h1>
+				<h1> Feedreader </h1>
 			</div>
 			
 			<div id="menue">
