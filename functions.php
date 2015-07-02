@@ -142,6 +142,7 @@
 	}
 
 	function build_query_select_feeds() {
+		
 		$owner = $_SESSION['uid'];
 		$feedid = "";
 		$folder = "";
