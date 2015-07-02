@@ -171,19 +171,22 @@
 			$feedid = $_SESSION['feed'];
 			$feedid = "AND feedid='$feedid'";
 		}
-
+		
+		if($_SESSION['show_all'])
+			$read = "";
+		
 		if(isset($_SESSION['folder'])) {
 			$folder = $_SESSION['folder'];
 			if($folder == "Favoriten"){
 				$folder = "AND marked_fav='1'";
+				$read = "";
 			}
 			else{
 				$folder = "AND folder='$folder'";
 			}
 		}
 
-		if($_SESSION['show_all'])
-			$read = "";
+		
 
 		$query = "SELECT id,title,url,description FROM feed_entries WHERE owner='$owner' $feedid $folder $read  ORDER BY date desc Limit $limit";
 
