@@ -352,11 +352,11 @@
 		$url = $mysqli->escape_string($url);
 		$folder = $mysqli->escape_string($folder);
 		
-		$content = file_get_contents($url);
-		$xmlElement = new SimpleXMLElement($content);
-		
-		
-		$title = $xmlElement->channel->title;
+		$xml = new DOMDocument("1.0");
+		$xml->load($url);
+
+		$feed = $xml->getElementsByTagName("title");
+		$title = extract_data($feed);
 		
 		$query="INSERT INTO feeds (owner, url, folder, title) VALUES('$owner','$url','$folder', '$title')";
 		if($stmt = $mysqli->prepare($query)) {
