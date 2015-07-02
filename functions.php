@@ -174,7 +174,12 @@
 
 		if(isset($_SESSION['folder'])) {
 			$folder = $_SESSION['folder'];
-			$folder = "AND folder='$folder'";
+			if($folder == "Favoriten"){
+				$folder = "AND marked_fav='1'";
+			}
+			else{
+				$folder = "AND folder='$folder'";
+			}
 		}
 
 		if($_SESSION['show_all'])
