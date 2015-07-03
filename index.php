@@ -1,50 +1,44 @@
 <html>
 <head>
 <title>wengrss</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<?php
-	
-	require_once("functions.php");
+   <?php
+	   
+	   require_once("functions.php");
 
-	if(!file_exists("db.ini")) {
-		header('Location: setup.php');
-		exit();
-	}
+	   if(!file_exists("db.ini")) {
+		   header('Location: setup.php');
+		   exit();
+	   }
 
-	if(isset($_POST['name']) && isset($_POST['pw'])) {
-		if(!$mysqli = db_connect())
-			return;
+	   if(isset($_POST['login']) && isset($_POST['password'])) {
+		   if(!$mysqli = db_connect())
+			   return;
 
-		if(login_user($mysqli, $_POST['name'], $_POST['pw'])) {
-			session_start();
-			$_SESSION['uid'] = $_POST['name'];
-			load_settings($mysqli,$_SESSION['uid']);
-			header('Location: Feedreader.php');
-			exit(); 
-		}
-	
-		$mysqli->close();
-		
-	}
+		   if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
+			   session_start();
+			   $_SESSION['uid'] = $_POST['login'];
+			   load_settings($mysqli,$_SESSION['uid']);
+			   header('Location: Feedreader.php');
+			   exit(); 
+		   }
+	   
+		   $mysqli->close();
+		   
+	   }
 ?>
-<form action="index.php" method="POST">
-	<table>
-	<tr>
-	<td>Name</td>
-	<td><input type="text" name="name"></td>
-	</tr>
-	<tr>
-	<td>Passwort</td>
-	<td><input type="password" name="pw"></td>
-	</tr>
-	<tr>
-	<td><input type="submit" value="Login"</td>
-	</tr>
-	</table>
-	<br>
-	<a href="register.php">Registrieren</a>
-</form>
+<div class="container">
+   <div class="login">
+   		<h1>Login</h1>
+	  <form action="index.php" method="POST">
+		  <input type="text" name="login" placeholder="Username">
+		  <input type="password" name="password" placeholder="Password">
+		  <p><input type="submit" value="Login"><input type="button" value="Register" onClick="location.href='register.php'"></p>
+	  </form>
+   </div>
+</div>
 
 </body>
 </html>
