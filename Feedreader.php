@@ -22,6 +22,7 @@
 			#ttLive, #anzFeeds{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
+			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
 			
 			
 			
@@ -62,6 +63,7 @@
 					<button type='button' id="Add" class='btn btn-default' aria-label='Left Align'>
 							<span class='glyphicon glyphicon-plus' aria-hidden='true'></span> Add Content
 					</button>
+					
 					<script>
 						$( "#EingabeButtons #Add" ).click(function() {
 							
@@ -78,8 +80,29 @@
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
+									alert(request.responseText);
 									document.getElementById("Eingabe").value = "";
 									document.getElementById("Folder").value = "";
+									$( "#wrapper #Fehler" ).empty();
+									$( "#wrapper #Success" ).empty();
+									if(request.responseText == "done" || request.responseText == 1){
+										$( "#wrapper #Success" ).text("Successful!");
+										$( "#wrapper #Success" ).show();
+										$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
+									}
+									else{
+										if(request.responseText == 0){
+											$( "#wrapper #Fehler" ).text("Sorry, but that's no URL");
+										}
+										else if(request.responseText == "url"){
+											$( "#wrapper #Fehler" ).text("URL alreadys exists");
+										}
+										else if(request.responseText == "empty"){
+											$( "#wrapper #Fehler" ).text("adfafs");
+										}
+										$( "#wrapper #Fehler" ).show();
+										$( "#wrapper #Fehler" ).delay(3000).fadeOut("slow");
+									}
 									$("#main").load("getFeed.php");
 									$("#menue #Folder").load("Folder.php");
 								}
@@ -95,6 +118,16 @@
 					?>
 				</div>
 			</div>
+			<div class="alert alert-danger" role="alert" id="Fehler"></div>
+			<div class="alert alert-success" role="alert" id="Success"></div>
+			<script>
+				$( "#wrapper #Fehler" ).ready(function() {
+					$( "#wrapper #Fehler" ).hide();
+				});
+				$( "#wrapper #Success" ).ready(function() {
+					$( "#wrapper #Success" ).hide();
+				});
+			</script>
 			<div id="Navbar">
 				<div id="NavButtons">
 					<button type='button' id="allRead" class='btn btn-default' aria-label='Left Align'>
@@ -169,6 +202,10 @@
 						request.onreadystatechange = function() {
 							if (request.readyState==4 && request.status==200){
 								//alert(request.responseText);
+								$( "#wrapper #Success" ).empty();
+								$( "#wrapper #Success" ).text("Saved Settings!");
+								$( "#wrapper #Success" ).show();
+								$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
 								$("#main").load("getFeed.php");
 							}
 						}
@@ -183,6 +220,10 @@
 						request.send('json='+data);
 						request.onreadystatechange = function() {
 							if (request.readyState==4 && request.status==200){
+								$( "#wrapper #Success" ).empty();
+								$( "#wrapper #Success" ).text("Successfully refreshed feeds!");
+								$( "#wrapper #Success" ).show();
+								$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
 								$("#main").load("getFeed.php");
 							}
 						}
@@ -196,10 +237,30 @@
 						request.send('json='+data);
 						request.onreadystatechange = function() {
 							if (request.readyState==4 && request.status==200){
-								if(request.responseText != 0){
+								$( "#wrapper #Fehler" ).empty();
+								$( "#wrapper #Success" ).empty();
+								if(request.responseText == 0){
+									$( "#wrapper #Fehler" ).text("Nothing selected to delete!");
+									$( "#wrapper #Fehler" ).show();
+									$( "#wrapper #Fehler" ).delay(3000).fadeOut('slow');
+								}
+								else if(request.responseText == "Default"){
+									$( "#wrapper #Fehler" ).text("You need this folder!");
+									$( "#wrapper #Fehler" ).show();
+									$( "#wrapper #Fehler" ).delay(3000).fadeOut('slow');
+								}
+								else if(request.responseText == "folder"){
+									$( "#wrapper #Success" ).text("Successfully deleted this folder!");
+									$( "#wrapper #Success" ).show();
+									$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
+								}
+								else if(request.responseText == "feed"){
+									$( "#wrapper #Success" ).text("Successfully deleted this feed!");
+									$( "#wrapper #Success" ).show();
+									$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
+								}
 									$("#main").load("getFeed.php");
 									$("#menue #Folder").load("Folder.php");
-								}
 							}
 						}
 					});

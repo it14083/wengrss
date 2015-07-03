@@ -23,21 +23,33 @@
 		
 		switch ($id){
 			case 1:
+				$url = $daten[1];
 				$folder = $daten[2];
-				if($folder != Null){
-					add_folder($mysqli,$_SESSION['uid'],$folder);
+				
+				if($url == "" && $folder == ""){
+					$return = "empty";
 				}
 				else{
-					$folder = "Default";
-				}
-				$url = $daten[1];
-				if (filter_var($url, FILTER_VALIDATE_URL)) {
-					$return = 1;
-					if(check_feed($mysqli, $_SESSION['uid'], $url, $folder)){
-						add_feed($mysqli, $_SESSION['uid'], $url, $folder);
-						getFeed_entries($url, $_SESSION['uid'], $folder);
+					
+					if($folder != Null){
+						add_folder($mysqli,$_SESSION['uid'],$folder);
+						$return = 1;
+					}
+					else{
+						$folder = "Default";
+					}
+					
+				
+					if (filter_var($url, FILTER_VALIDATE_URL)) {
+						$return = "url";
+						if(check_feed($mysqli, $_SESSION['uid'], $url, $folder)){
+							add_feed($mysqli, $_SESSION['uid'], $url, $folder);
+							getFeed_entries($url, $_SESSION['uid'], $folder);
+							$return = "done";
+						}
 					}
 				}
+				
 				break;
 			
 			case 2:
@@ -122,7 +134,7 @@
 						$return = "folder";
 					}
 					else{
-						$return = 0;
+						$return = "Default";
 					}
 				}
 				elseif(isset($_SESSION['feed'])){
@@ -130,6 +142,7 @@
 					unset($_SESSION['feed']);
 					$return = "feed";
 				}
+				break;
 				
 		}
 		
@@ -472,12 +485,14 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 			$stmt->bind_result($id);
-			while($stmt->fetch()) {
+			if($stmt->fetch()){
+				while($stmt->fetch()) {
 				$id_arr[] = $id;
-			}
+				}
 
-			foreach($id_arr as $id) {
-				move_feed_to_folder($mysqli,$id,"Default");
+				foreach($id_arr as $id) {
+					move_feed_to_folder($mysqli,$id,"Default");
+				}
 			}
 		}
 	}
