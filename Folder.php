@@ -28,6 +28,7 @@
 								?>
 								<script>
 									$("#URL-<?=$folder?> #<?=$id?>").click(function(){
+										alert("ok");
 										derFeed = $("#URL-<?=$folder?> #<?=$id?>").attr("id");
 										var feld = new Array("6", derFeed);
 										data = JSON.stringify(feld);
