@@ -14,7 +14,7 @@
 		$stmt->bind_result($folder);
 		while($stmt->fetch()){
 			echo "<button type='button' class='list-group-item' id='$folder'>".$folder."</button>";
-			if($folder != "Favoriten"){
+			if($folder != "Favoriten" && $folder != "Alle"){
 				echo "<div id='URL-$folder'>";
 					echo"<p>";
 						$mysqlURL = db_connect();

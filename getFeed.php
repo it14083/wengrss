@@ -84,7 +84,12 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
-									$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
+									if(request.responseText == 1){
+										$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
+									}
+									else{
+										$( ".Ausgabe<?=$id?> #delete").css('color','rgb(0, 0, 0)');
+									}
 								}
 							}
 						});
@@ -118,7 +123,12 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
 									//alert("ok");
-									$( ".Ausgabe<?=$id?> #favorite"  ).css('color','rgb(255, 127, 36)');
+									if(request.responseText == 1){
+										$( ".Ausgabe<?=$id?> #favorite"  ).css('color','rgb(255, 127, 36)');
+									}
+									else{
+										$( ".Ausgabe<?=$id?> #favorite"  ).css('color','rgb(0, 0, 0)');
+									}
 								}
 							}
 							
