@@ -415,6 +415,33 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
+
+		$query = "SELECT id FROM feeds WHERE owner='$owner' AND folder='$folder'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($id);
+			while($stmt->fetch()) {
+				$id_arr[] = $id;
+			}
+
+			foreach($id_arr as $id) {
+				move_feed_to_folder($mysqli,$id,"Default");
+			}
+		}
+	}
+
+	function move_feed_to_folder($mysqli,$id,$folder) {
+		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		} else {
+			echo $mysqli->error;
+		}
+
+		$query = "UPDATE feed_entries SET folder='$folder' WHERE feedid='$id'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
 	}
 	
 	function folderSession($folder){
