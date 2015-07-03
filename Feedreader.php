@@ -6,10 +6,12 @@
 		<style>
 			#header{ color: black; text-align:center; padding:5px; height:10%;}
 			#menue { position:absolute; top:2%;line-height:30px; background-color:#F6F6F6; height:98%; width:20%; float:left; padding:5px; overflow-y:scroll; overflow-x:hidden;}
-			#main {position:absolute; height:75%; width:75%; float:left; padding:10px; left:23%; top:20%;overflow-y:scroll;}
+			#main {position:absolute; height:75%; width:79%; float:left; padding:10px; left:20%; top:20%;overflow-y:scroll;}
 			#Navbar {position:absolute; height:5%; width:80%; float:left: padding:10px; left:20%; top:13%; }
 			#Artikel{ width:75%; margin-bottom:5px; }
-			#Ausgabe{width: 100%;}
+			#Ausgabe0{width: 100%; background-color:#F2F2F2;}
+			#Ausgabe1{width: 100%;}
+			#Ausgabe{margin-left:10%;}
 			#Buttons{width:20%; position:absolute; left:80%;}
 			#NavButtons{width:20%; position:absolute; left:76%; }
 			#gelb{background-color:#ff7f24;}
