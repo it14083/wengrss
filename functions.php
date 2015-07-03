@@ -189,6 +189,7 @@
 				add_feedentry($mysqli,$id,$title,$link,$summary,$date,$owner,$folder);
 			}
 
+
 			if($date > $youngest) {
 				$youngest = $date;
 			}
