@@ -33,8 +33,10 @@
 				$url = $daten[1];
 				if (filter_var($url, FILTER_VALIDATE_URL)) {
 					$return = 1;
-					add_feed($mysqli, $_SESSION['uid'], $url, $folder);
-					getFeed_entries($url, $_SESSION['uid'], $folder);
+					if(check_feed($mysqli, $_SESSION['uid'], $url, $folder)){
+						add_feed($mysqli, $_SESSION['uid'], $url, $folder);
+						getFeed_entries($url, $_SESSION['uid'], $folder);
+					}
 				}
 				break;
 			
@@ -403,6 +405,18 @@
 			}
 		}
 		return false;
+	}
+	
+	function check_feed($mysqli, $owner, $url, $folder){
+		$query = "SELECT url FROM feeds WHERE url='$url' AND owner='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($url_taken);
+			if($stmt->fetch()) {
+				return false;
+			}
+		}
+		return true;	
 	}
 
 	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date, $owner, $folder) {
