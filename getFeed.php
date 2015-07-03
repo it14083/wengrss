@@ -35,7 +35,15 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description);
+			$color = 0;
 			while($stmt->fetch()){
+				if($color == 0){
+					$color = 1;
+				}
+				else{
+					$color = 0;
+				}
+				echo "<div id='Ausgabe$color'>";
 				echo "<div id='Ausgabe' class='Ausgabe".$id."'>\n";
 					echo "<a href='".$url."' title='".$title."' target='_blank'>" .$title ."</a>";
 					echo"<div id='Buttons'>";
@@ -124,6 +132,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 						echo $description ."<br>";
 					echo "</div>";
 					echo "<br>";
+				echo "</div>";
 				echo "</div>";
 			}
 		}
