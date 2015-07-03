@@ -21,7 +21,7 @@
 			#Add{width:87%; margin-left:9%;}
 			#ttLive, #anzFeeds{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
-			#saveSettings{width:80%; margin-left:5%; margin-top:10%;}
+			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
 			
 			
 			
@@ -129,6 +129,8 @@
 							<li>Show Feeds <input type="text" id="anzFeeds" value="<?=$_SESSION['articles_per_page'] ?>"> </input></li>
 							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
 							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
+							<li><button type='button' id='remove' class='btn btn-default' aria-label='Left Align'>Remove </button></li>
+							
 						</ul>
 				
 					<script>
@@ -182,6 +184,22 @@
 						request.onreadystatechange = function() {
 							if (request.readyState==4 && request.status==200){
 								$("#main").load("getFeed.php");
+							}
+						}
+					});
+					$( "#NavButtons #remove" ).click(function() {
+						var feld = new Array("11");
+						data = JSON.stringify(feld);
+						var request = new XMLHttpRequest();
+						request.open('post', 'functions.php', true);
+						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+						request.send('json='+data);
+						request.onreadystatechange = function() {
+							if (request.readyState==4 && request.status==200){
+								if(request.responseText != 0){
+									$("#main").load("getFeed.php");
+									$("#menue #Folder").load("Folder.php");
+								}
 							}
 						}
 					});

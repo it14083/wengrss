@@ -11,6 +11,7 @@
 		8: getFavorite
 		9: mark Read
 		10: updateSettings
+		11: remove 
 	
 	*/
 	if(isset($_POST['json'])){
@@ -39,7 +40,14 @@
 			
 			case 2:
 				$feed_id = $daten[1];
-				setRead($feed_id);
+				$value = getRead($feed_id);
+				if($value == 0){
+					$return = 1;
+				}
+				else{
+					$return = 0;
+				}
+				setRead($feed_id, $return);
 				break;
 				
 			case 3:
@@ -69,7 +77,14 @@
 			
 			case 7:
 				$idFav = $daten[1];
-				setFavorite($idFav);
+				$value = getFavorite($idFav);
+				if($value == 0){
+					$return = 1;
+				}
+				else{
+					$return = 0;
+				}
+				setFavorite($idFav, $return);
 				break;
 			
 			case 8:
@@ -94,6 +109,25 @@
 				update_settings($mysqli, $_SESSION['uid'], $ttl, $anzFeeds, $checked);
 				//echo $ttl;
 				break;
+			
+			case 11:
+				if(isset($_SESSION['folder'])){
+					$folder = $_SESSION['folder'];
+					if($folder != "Default" && $folder != "Favoriten" && $folder != "Alle"){
+						//Feeds noch in Default verschieben
+						delete_folder($mysqli, $_SESSION['uid'], $_SESSION['folder']);
+						unset($_SESSION['folder']);
+						$return = "folder";
+					}
+					else{
+						$return = 0;
+					}
+				}
+				elseif(isset($_SESSION['feed'])){
+					delete_feed($mysqli, $_SESSION['feed']);
+					unset($_SESSION['feed']);
+					$return = "feed";
+				}
 				
 		}
 		
@@ -167,7 +201,7 @@
 			$stmt->execute();
 			$stmt->bind_result($id,$title,$url,$desc);
 			while($stmt->fetch()) {
-				setRead($id);
+				setRead($id, 1);
 			}
 		}
 
@@ -210,7 +244,11 @@
 		
 		if(isset($_SESSION['folder'])) {
 			$folder = $_SESSION['folder'];
-			if($folder == "Favoriten"){
+			
+			if($folder == "Alle"){
+				$folder = "";
+			}
+			elseif($folder == "Favoriten"){
 				$folder = "AND marked_fav='1'";
 				$read = "";
 			}
@@ -238,9 +276,9 @@
 	}
 
 
-	function setFavorite($idFav){
+	function setFavorite($idFav, $value){
 		$mysqli = db_connect();
-		$query = "UPDATE feed_entries SET marked_fav='1' WHERE id='$idFav'";
+		$query = "UPDATE feed_entries SET marked_fav='$value' WHERE id='$idFav'";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 		}
@@ -258,9 +296,9 @@
 		}
 	}
 	
-	function setRead($feed_id){
+	function setRead($feed_id, $value){
 		$mysqli = db_connect();
-		$query = "UPDATE feed_entries SET marked_read='1' WHERE id='$feed_id'";
+		$query = "UPDATE feed_entries SET marked_read='$value' WHERE id='$feed_id'";
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 		}
@@ -492,7 +530,8 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
-
+		
+		add_folder($mysqli, $name, "Alle");
 		add_folder($mysqli, $name, "Default");
 		add_folder($mysqli, $name, "Favoriten");
 
