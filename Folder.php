@@ -27,8 +27,7 @@
 								echo "<button type='button' class='list-group-item' name= 'FeedButton' id='$id'>".$title."</button>";
 								?>
 								<script>
-									$("#URL-<?=$folder?> #<?=$id?>").click(function(){
-										alert("ok");
+									$("#menue #<?=$id?>").click(function(){
 										derFeed = $("#URL-<?=$folder?> #<?=$id?>").attr("id");
 										var feld = new Array("6", derFeed);
 										data = JSON.stringify(feld);
