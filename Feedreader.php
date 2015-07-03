@@ -80,7 +80,6 @@
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
-									alert(request.responseText);
 									document.getElementById("Eingabe").value = "";
 									document.getElementById("Folder").value = "";
 									$( "#wrapper #Fehler" ).empty();
