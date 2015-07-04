@@ -225,6 +225,18 @@
 
 	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all) {
 
+		if(is_nan($ttl)) {
+			$ttl = 14;
+		} else if($ttl < 1) {
+			$ttl = 14;
+		}
+
+		if(is_nan($articles_per_page)) {
+			$articles_per_page = 10;
+		} else if($articles_per_page < 1) {
+			$articles_per_page = 10;
+		}
+
 		$_SESSION['ttl'] = $ttl;
 		$_SESSION['articles_per_page'] = $articles_per_page;
 		$_SESSION['show_all'] = $show_all;
