@@ -13,6 +13,11 @@
 
          $mysqli = new mysqli("localhost",$user,$pw,$db);
 
+		 if($mysqli->connect_errno) {
+		 	echo "Failed to connect to MySQL: " . $mysqli->connect_error;
+			exit();
+		}
+
          $query = "CREATE TABLE `feeds` (
                      `id` int(32) NOT NULL AUTO_INCREMENT,
                      `owner` varchar(32) NOT NULL,
