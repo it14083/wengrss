@@ -215,7 +215,7 @@
 		$query = build_query_select_feeds();
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
-			$stmt->bind_result($id,$title,$url,$desc);
+			$stmt->bind_result($id,$title,$url,$desc,$date);
 			while($stmt->fetch()) {
 				setRead($id, 1);
 			}
