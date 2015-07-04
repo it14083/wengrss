@@ -287,7 +287,7 @@
 
 		
 
-		$query = "SELECT id,title,url,description FROM feed_entries WHERE owner='$owner' $feedid $folder $read  ORDER BY date desc Limit $limit";
+		$query = "SELECT id,title,url,description,date FROM feed_entries WHERE owner='$owner' $feedid $folder $read  ORDER BY date desc Limit $limit";
 
 		return $query;
 	}

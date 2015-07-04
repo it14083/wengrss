@@ -34,7 +34,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
-			$stmt->bind_result($id, $title, $url, $description);
+			$stmt->bind_result($id, $title, $url, $description, $date);
 			$color = 0;
 			while($stmt->fetch()){
 				if($color == 0){
@@ -45,7 +45,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 				}
 				echo "<div id='Ausgabe$color'>";
 				echo "<div id='Ausgabe' class='Ausgabe".$id."'>\n";
-					echo "<a href='".$url."' title='".$title."' target='_blank'>" .$title ."</a>";
+					echo "<a href='".$url."' title='".$title."' target='_blank'>" .$title." "."-"." ".$date."</a>";
 					echo"<div id='Buttons'>";
 						echo"<button type='button' id='delete' class='btn btn-default' aria-label='Left Align'>";
 							echo"<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
