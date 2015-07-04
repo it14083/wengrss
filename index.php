@@ -34,24 +34,22 @@
 		   
 	   }
 ?>
-<div class="container">
-   <div class="login">
-   		<h1>Login</h1>
+   <div class="container">
 	  <form action="index.php" method="POST">
-		  <input type="text" name="login" placeholder="Username">
-		  <input type="password" name="password" placeholder="Password">
-		  <p><input type="submit" value="Login"><input type="button" value="Register" onClick="location.href='register.php'"></p>
+		  <p><input type="text" name="login" placeholder="Username">
+		  <p><input type="password" name="password" placeholder="Password">
+		  <p><input type="submit" value="Login"><input type="button" value="Register" onClick="location.href='register.php'">
 	  </form>
    </div>
-</div>
 
-<?php
-	if(isset($login_failed)) {
-		echo "<div class=container>";
-			echo "<div class=login>" . $login_failed . "</div>";
-		echo "</div>";
-	}
-?>
+	<?php
+		if(isset($login_failed)) {
+			echo "<div class=container>";
+			echo "<div class=error>". $login_failed . "</div>";
+			echo "</div>";
+			unset($login_failed);
+		}
+	?>
 
 </body>
 </html>

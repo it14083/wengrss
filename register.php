@@ -16,6 +16,9 @@
 			} else if(name_taken($mysqli, $_POST['name'])) {
 				$error = $_POST['name'] . " already taken";
 				$mysqli->close();
+			} else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+				$error = "Invalid Email";
+				$mysqli->close();
 			} else if(create_user($mysqli,$_POST['name'],$_POST['email'],$_POST['pw'])) {
 				$mysqli->close();
 				header('Location: index.php');
@@ -30,24 +33,20 @@
 		}
 	}
 ?>
-<div class="container">
-	<div class="login">
-		<h1>Register</h1>
-
+	<div class="container">
 		<form action="register.php" method="POST">
-			<input type="text" name="name" placeholder="Username">
-			<input type="text" name="email" placeholder="Email">
-			<input type="password" name="pw" placeholder="Password">
+			<p><input type="text" name="name" placeholder="Username">
+			<p><input type="text" name="email" placeholder="Email">
+			<p><input type="password" name="pw" placeholder="Password">
 			<p><input type="submit" value="Register"></p>
 		</form>
 	</div>
-</div>
 
 <?php
 	if(isset($error)) {
 		echo "<div class=container>";
-		echo "<div class=login>" . $error . "</div>";
-		echo "</div>";
+		echo "<div class=error>" . $error . "</div>";
+		unset($error);
 	}
 ?>	
 
