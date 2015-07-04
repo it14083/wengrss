@@ -9,22 +9,24 @@
 
 	if(isset($_POST['name']) && isset($_POST['email']) &&isset($_POST['pw'])) {
 		if($_POST['name'] != "" && $_POST['email'] != "" && $_POST['pw'] != "") {
-			if(!$mysqli = db_connect()) {
-				return;
-			}
+			$mysqli = db_connect();
 
-			if(name_taken($mysqli, $_POST['name'])) {
-				echo $_POST['name'] . " bereits vergeben";
+			if($mysqli->connect_errno) {
+				$error = "Failed to connect to MySQL: " . $mysqli->connect_error;
+			} else if(name_taken($mysqli, $_POST['name'])) {
+				$error = $_POST['name'] . " already taken";
+				$mysqli->close();
 			} else if(create_user($mysqli,$_POST['name'],$_POST['email'],$_POST['pw'])) {
-				echo $_POST['name'] . " erstellt";
 				$mysqli->close();
 				header('Location: index.php');
 				exit();
 			} else {
-				echo "erstellen fehlgeschlagen";
+				$error = "Registration failed";
 				$mysqli->close();
 			}
 
+		} else {
+			$error = "Empty fields";
 		}
 	}
 ?>
@@ -40,6 +42,14 @@
 		</form>
 	</div>
 </div>
+
+<?php
+	if(isset($error)) {
+		echo "<div class=container>";
+		echo "<div class=login>" . $error . "</div>";
+		echo "</div>";
+	}
+?>	
 
 </body>
 </html>

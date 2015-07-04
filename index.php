@@ -14,18 +14,23 @@
 	   }
 
 	   if(isset($_POST['login']) && isset($_POST['password'])) {
-		   if(!$mysqli = db_connect())
-			   return;
+		   $mysqli = db_connect();
 
-		   if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
+			if($mysqli->connect_errno) {
+				$login_failed = "Failed to connect to MySQL: " . $mysqli->connect_error;
+				$mysqli->close();
+		   } else if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
 			   session_start();
 			   $_SESSION['uid'] = $_POST['login'];
 			   load_settings($mysqli,$_SESSION['uid']);
+		   		$mysqli->close();
 			   header('Location: Feedreader.php');
 			   exit(); 
-		   }
+		   } else {
+		   		$login_failed = "Wrong Password or Username";
+				$mysqli->close();
+			}
 	   
-		   $mysqli->close();
 		   
 	   }
 ?>
@@ -39,6 +44,14 @@
 	  </form>
    </div>
 </div>
+
+<?php
+	if(isset($login_failed)) {
+		echo "<div class=container>";
+			echo "<div class=login>" . $login_failed . "</div>";
+		echo "</div>";
+	}
+?>
 
 </body>
 </html>
