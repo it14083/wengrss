@@ -11,7 +11,7 @@
 			#Artikel{ width:75%; margin-bottom:5px; }
 			#Ausgabe0{width: 100%; background-color:#F2F2F2;}
 			#Ausgabe1{width: 100%;}
-			#Ausgabe{margin-left:10%;}
+			#Ausgabe{margin-left:10%; }
 			#Buttons{width:20%; position:absolute; left:80%;}
 			#NavButtons{width:20%; position:absolute; left:76%; }
 			#gelb{background-color:#ff7f24;}
@@ -23,7 +23,7 @@
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
-			
+			p{float: right;}
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->

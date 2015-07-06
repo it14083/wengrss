@@ -41,6 +41,9 @@ body {
   font: 13px/20px Tahoma, Verdana, sans-serif;
   color: #404040;
   background: #ffffff;
+  background-image:url("../Background.jpg");
+  background-size:100%, 100%;
+  background-repeat: no-repeat;
 }
 
 .container {
