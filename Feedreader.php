@@ -47,6 +47,8 @@
 			//$_SESSION['folder'] =  "Bla";
 			unset($_SESSION['folder']);
 			unset($_SESSION['feed']);
+			unset($_SESSION['anzRead']);
+			$_SESSION['anzRead'] = 0;
 			updateFeeds();
 			
 		?>

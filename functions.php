@@ -55,16 +55,15 @@
 			case 2:
 				$feed_id = $daten[1];
 				$value = getRead($feed_id);
-				if(empty($_SESSION['anzRead'])){
-					$_SESSION['anzRead'] = 0;
-				}
+				
 				if($value == 0){
-					$_SESSION['anzRead'] = 5;
 					$return = 1;
+					$_SESSION['anzRead']++;
 				}
 				else{
 					$return = 0;
-					
+					$_SESSION['anzRead']--;
+
 				}
 				setRead($feed_id, $return);
 				break;
