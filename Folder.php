@@ -13,7 +13,7 @@
 		$stmt->execute();
 		$stmt->bind_result($folder);
 		while($stmt->fetch()){
-			echo "<button type='button' class='list-group-item' id='$folder'>".$folder."</button>";
+			echo "<button type='button' class='list-group-item folder' id='$folder'>".$folder."</button>";
 			if($folder != "Favoriten" && $folder != "Alle"){
 				echo "<div id='URL-$folder'>";
 					echo"<p>";
@@ -24,11 +24,16 @@
 							$stmtURL->bind_result($title, $id);
 						
 							while($stmtURL->fetch()){
-								echo "<button type='button' class='list-group-item ' name= 'FeedButton' id='$id'>".$title."</button>";
+								echo "<button type='button' class='list-group-item feed' name= 'FeedButton' id='$id'>".$title."</button>";
 								?>
 								<script>
-							
+								/*	$("#menue #<?=$id?>").ready(function() {
+										//$(".list-group-item").draggable();
+										$(this).css('border','3px solid black')
+									});
+								*/
 									$("#menue #<?=$id?>").click(function(){
+										
 										derFeed = $("#URL-<?=$folder?> #<?=$id?>").attr("id");
 										var feld = new Array("6", derFeed);
 										data = JSON.stringify(feld);

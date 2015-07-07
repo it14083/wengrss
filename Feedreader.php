@@ -37,6 +37,15 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		
+		<script>
+			$(function(){
+				$(".list-group-item.feed").css('border','3px solid black');
+				      
+				$(".list-group-item.feed").button().draggable({cancel:false});
+				$( ".list-group-item.folder" ).droppable({});
+			});
+		</script>
+			
 	</head>
 
 	<?php
