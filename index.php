@@ -25,9 +25,7 @@
 			   $_SESSION['uid'] = $_POST['login'];
 			   load_settings($mysqli,$_SESSION['uid']);
 		   		$mysqli->close();
-			   header('Refresh: 2; url=Feedreader.php');
-			   echo "<div class=container>";
-			   echo "<div class=success>Logged in</div></div>";
+			   header('Location: Feedreader.php');
 			   exit(); 
 		   } else {
 		   		$login_failed = "Wrong Password or Username";
