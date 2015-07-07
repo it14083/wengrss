@@ -29,12 +29,14 @@
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
 			
 		</style>
-		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
 	</head>
 
 	<?php
@@ -49,7 +51,7 @@
 			unset($_SESSION['feed']);
 			unset($_SESSION['anzRead']);
 			$_SESSION['anzRead'] = 0;
-			updateFeeds();
+			//updateFeeds();
 			
 		?>
 		<div id="wrapper">

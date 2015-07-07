@@ -24,9 +24,10 @@
 							$stmtURL->bind_result($title, $id);
 						
 							while($stmtURL->fetch()){
-								echo "<button type='button' class='list-group-item' name= 'FeedButton' id='$id'>".$title."</button>";
+								echo "<button type='button' class='list-group-item ' name= 'FeedButton' id='$id'>".$title."</button>";
 								?>
 								<script>
+							
 									$("#menue #<?=$id?>").click(function(){
 										derFeed = $("#URL-<?=$folder?> #<?=$id?>").attr("id");
 										var feld = new Array("6", derFeed);
@@ -40,8 +41,8 @@
 												$("#main").load("getFeed.php");;
 											}
 										}
-					
-									});
+									
+								});
 								</script>
 								<?php
 						
