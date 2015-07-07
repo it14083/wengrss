@@ -8,7 +8,7 @@
 <?php
 	require_once("functions.php");
 
-	if(isset($_POST['name']) && isset($_POST['email']) &&isset($_POST['pw'])) {
+	if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['pw']) && isset($_POST['pw2'])) {
 		if($_POST['name'] != "" && $_POST['email'] != "" && $_POST['pw'] != "") {
 			$mysqli = db_connect();
 
@@ -19,6 +19,9 @@
 				$mysqli->close();
 			} else if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
 				$error = "Invalid Email";
+				$mysqli->close();
+			} else if($_POST['pw'] != $_POST['pw2']) {
+				$error = "Passwords dont match";
 				$mysqli->close();
 			} else if(create_user($mysqli,$_POST['name'],$_POST['email'],$_POST['pw'])) {
 				$mysqli->close();
@@ -41,6 +44,7 @@
 			<p><input type="text" name="name" placeholder="Username">
 			<p><input type="text" name="email" placeholder="Email">
 			<p><input type="password" name="pw" placeholder="Password">
+			<p><input type="password" name="pw2" placeholder="Retype Password">
 			<p><input type="submit" value="Register"></p>
 		</form>
 	</div>
