@@ -1,7 +1,7 @@
 <html>
 	<head>	
 	
-		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>Feedreader</title>
 		<style>
 			#header{ color: black; text-align:center; padding:5px; height:10%;}
@@ -23,7 +23,7 @@
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
-			p{float: right;}
+			time{position:absolute; right:12%;}
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
@@ -47,6 +47,7 @@
 			//$_SESSION['folder'] =  "Bla";
 			unset($_SESSION['folder']);
 			unset($_SESSION['feed']);
+			unset($_SESSION['anzRead']);
 			updateFeeds();
 			
 		?>

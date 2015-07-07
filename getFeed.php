@@ -1,6 +1,7 @@
 <html>
+
 	<head>	
-		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	</head>
 <body>
 
@@ -44,8 +45,8 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 					$color = 0;
 				}
 				echo "<div id='Ausgabe$color'>";
-				echo "<div id='Ausgabe' class='Ausgabe".$id."'>\n";
-					echo "<a href='".$url."' title='".$title."' target='_blank'>" .$title."</a>";
+				echo "<div id='Ausgabe' class='Ausgabe".$id."'>";
+					echo "<p><a href='".$url."' title='".$title."' target='_blank'>" .$title."</a><time>".$date."</time></p>";
 					echo"<div id='Buttons'>";
 						echo"<button type='button' id='delete' class='btn btn-default' aria-label='Left Align'>";
 							echo"<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
@@ -84,6 +85,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
+									alert(<?=$_SESSION['anzRead']?>);
 									if(request.responseText == 1){
 										$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
 									}
