@@ -85,7 +85,7 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 							request.send('json='+data);
 							request.onreadystatechange = function() {
 								if (request.readyState==4 && request.status==200){
-									alert(<?=$_SESSION['anzRead']?>);
+									//alert(<?=$_SESSION['anzRead']?>);
 									if(request.responseText == 1){
 										$( ".Ausgabe<?=$id?> #delete").css('color','rgb(255, 127, 36)');
 									}
