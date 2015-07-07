@@ -626,4 +626,36 @@
 		return hash('sha256',$pw . $salt);
 	}
 
+	function check_password($mysqli,$name,$pw) {
+		$query = "SELECT password,salt FROM users WHERE name='$name'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$stmt->bind_result($pw_hash,$salt);
+			if($stmt->fetch()) {
+				if($pw_hash == encrypt_password($pw,$salt)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	function change_password($mysqli,$name,$pw) {
+		$pw = $mysqli->escape_string($pw);
+
+		$rand = "";
+		for($i = 0; $i<128; $i++)
+			$rand .= chr(mt_rand(0,255));
+			
+		$salt = substr(bin2hex($rand),0,32);
+
+		$pw_hash = encrypt_password($pw, $salt);
+		$query = "UPDATE users SET password='$pw_hash',salt='$salt' WHERE name='$name'";
+
+		if($stmt = $mysqli->prepare($query)) {
+			return $stmt->execute();
+		}
+		return false;
+	}
+
 ?>
