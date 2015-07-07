@@ -1,7 +1,7 @@
 <html>
 	<head>	
 	
-		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 		<title>Feedreader</title>
 		<style>
 			#header{ color: black; text-align:center; padding:5px; height:10%;}
@@ -11,7 +11,7 @@
 			#Artikel{ width:75%; margin-bottom:5px; }
 			#Ausgabe0{width: 100%; background-color:#F2F2F2;}
 			#Ausgabe1{width: 100%;}
-			#Ausgabe{margin-left:10%;}
+			#Ausgabe{margin-left:10%; }
 			#Buttons{width:20%; position:absolute; left:80%;}
 			#NavButtons{width:20%; position:absolute; left:76%; }
 			#gelb{background-color:#ff7f24;}
@@ -23,18 +23,20 @@
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
-			
+			time{position:absolute; right:12%;}
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
 			
 		</style>
-		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+		
 	</head>
 
 	<?php
@@ -47,7 +49,9 @@
 			//$_SESSION['folder'] =  "Bla";
 			unset($_SESSION['folder']);
 			unset($_SESSION['feed']);
-			updateFeeds();
+			unset($_SESSION['anzRead']);
+			$_SESSION['anzRead'] = 0;
+			//updateFeeds();
 			
 		?>
 		<div id="wrapper">

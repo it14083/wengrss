@@ -2,6 +2,7 @@
 <head>
 	<title>New Account</title>
 	<link rel="stylesheet" href="css/style.css">
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 </head>
 <body>
 <?php
@@ -48,6 +49,7 @@
 	if(isset($error)) {
 		echo "<div class=container>";
 		echo "<div class=error>" . $error . "</div>";
+		echo "</div>";
 		unset($error);
 	}
 ?>	

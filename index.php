@@ -1,7 +1,8 @@
 <html>
 <head>
-<title>wengrss</title>
+<title>Login</title>
 <link rel="stylesheet" href="css/style.css">
+
 </head>
 <body>
    <?php
@@ -24,7 +25,9 @@
 			   $_SESSION['uid'] = $_POST['login'];
 			   load_settings($mysqli,$_SESSION['uid']);
 		   		$mysqli->close();
-			   header('Location: Feedreader.php');
+			   header('Refresh: 2; url=Feedreader.php');
+			   echo "<div class=container>";
+			   echo "<div class=success>Logged in</div></div>";
 			   exit(); 
 		   } else {
 		   		$login_failed = "Wrong Password or Username";
@@ -48,8 +51,7 @@
 			echo "<div class=error>". $login_failed . "</div>";
 			echo "</div>";
 			unset($login_failed);
-		}
+		} 
 	?>
-
 </body>
 </html>
