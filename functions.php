@@ -221,8 +221,14 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 			$stmt->bind_result($id,$title,$url,$desc,$date);
-			while($stmt->fetch()) {
+			$i = 0;
+			$to_mark = $_SESSION['articles_per_page'];
+			if($_SESSION['show_all'] == 0) {
+				$to_mark = $_SESSION['articles_per_page'] - $_SESSION['anzRead'];
+			}
+			while($stmt->fetch() && $i < $to_mark) {
 				setRead($id, 1);
+				$i++;
 			}
 		}
 
