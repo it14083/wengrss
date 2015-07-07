@@ -65,6 +65,11 @@ body {
   color: red;
 }
 
+.success {
+  text-align: center;
+  color: green;
+}
+
 input {
   font-family: Tahoma, Verdana, sans-serif;
   font-size: 14px;
@@ -81,6 +86,7 @@ input[type=text], input[type=password] {
   border-color: #c4c4c4 #d1d1d1 #d4d4d4;
   border-radius: 2px;
 }
+
 input[type=text]:focus, input[type=password]:focus {
   background: white;
 }
@@ -98,6 +104,7 @@ input[type=submit],input[type=button] {
   border-radius: 2px;
   width: 100px;
 }
+
 input[type=submit]:active,input[type=button]:active {
   background: #f3f3f3;
   border-color: #9eb9c2 #b3c0c8 #b4ccce;
