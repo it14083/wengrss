@@ -149,7 +149,7 @@
 				break;
 				
 		}
-		
+		$mysqli->close();
 		echo $return;
 	
 	}
@@ -199,6 +199,7 @@
 			}
 		}
 		update_lastupdated($mysqli,$id,$youngest);
+		$mysqli->close();
 	}
 
 	function extract_data($item) {
@@ -314,6 +315,7 @@
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 		}
+		$mysqli->close();
 	}
 	
 	function getFavorite($idFav){
@@ -326,6 +328,7 @@
 				return $fav;
 			}
 		}
+		$mysqli->close();
 	}
 	
 	function setRead($feed_id, $value){
@@ -334,6 +337,7 @@
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 		}
+		$mysqli->close();
 	}
 	
 	function getRead($feed_id){
@@ -346,6 +350,7 @@
 				return $read;
 			}
 		}
+		$mysqli->close();
 	}
 	
 	function get_id($url){
@@ -401,7 +406,8 @@
 		} else {
 			echo $mysqli->error;
 		}
-
+		
+		$mysqli->close();
 		
 	}
 

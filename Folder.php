@@ -51,6 +51,7 @@
 						}
 					echo "</p>";
 				echo "</div>";
+				$mysqlURL->close();
 			}
 			?>
 			<script>
@@ -81,5 +82,6 @@
 			<?php
 		}
 	}
+	$mysqli->close();
 ?>
 	
