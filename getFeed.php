@@ -33,6 +33,9 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 
 		$query = build_query_select_feeds();
 
+		//beim Neuladen ist die Anzahl der neu markierten Artikel wieder null
+		$_SESSION['anzRead'] = 0;
+
 		if($stmt = $mysqli->prepare($query)){
 			$stmt->execute();
 			$stmt->bind_result($id, $title, $url, $description, $date);
