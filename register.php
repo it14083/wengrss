@@ -46,6 +46,7 @@
 	if(isset($error)) {
 		echo "<div class=container>";
 		echo "<div class=error>" . $error . "</div>";
+		echo "</div>";
 		unset($error);
 	}
 ?>	
