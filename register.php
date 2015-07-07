@@ -21,7 +21,9 @@
 				$mysqli->close();
 			} else if(create_user($mysqli,$_POST['name'],$_POST['email'],$_POST['pw'])) {
 				$mysqli->close();
-				header('Location: index.php');
+				echo "<div class=container>";
+				echo "<div class=success>Account created</div></div>";
+				header('Refresh: 2;url=index.php');
 				exit();
 			} else {
 				$error = "Registration failed";
