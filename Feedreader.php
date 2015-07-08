@@ -145,7 +145,7 @@
 			</script>
 			<div id="Navbar">
 				<div id="NavButtons">
-					<button type='button' id="allRead" title='Mark all displayed Articles as read' class='btn btn-default' aria-label='Left Align'>
+					<button type='button' id="allRead" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
 					</button>
 					
