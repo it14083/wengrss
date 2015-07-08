@@ -44,7 +44,10 @@
 						$return = "url";
 						if(check_feed($mysqli, $_SESSION['uid'], $url, $folder)){
 							add_feed($mysqli, $_SESSION['uid'], $url, $folder);
-							getFeed_entries($url, $_SESSION['uid'], $folder);
+							$urls[] = $url;
+							$xml = getFeedXML($urls);
+							$id = get_id($url);
+							getFeed_entries($id, $xml[0], $_SESSION['uid'], $folder);
 							$return = "done";
 						}
 					}
@@ -154,14 +157,14 @@
 	
 	}
 
-	function getFeed_entries($feed_url, $owner, $folder, $lastdate = 0) {
-		$id = get_id($feed_url);
+	function getFeed_entries($id, $xml_string, $owner, $folder, $lastdate = 0) {
+		//$id = get_id($feed_url);
 		$youngest = $lastdate;
 
 		$mysqli = db_connect();
 
 		$xml = new DOMDocument("1.0");
-		$xml->load($feed_url);
+		$xml->loadXML($xml_string);
 
 		$atom = $xml->getElementsByTagName("feed");
 		$item_tag = "item";
@@ -407,15 +410,51 @@
 			$stmt->execute();
 			$stmt->bind_result($url, $folder, $date);
 			while($stmt->fetch()) {
-				getFeed_entries($url, $owner, $folder, $date);
+				//getFeed_entries($url, $owner, $folder, $date);
+				$urls[] = $url;
+				$id[] = get_id($url);
+				$folders[] = $folder;
+				$dates[] = $date;
 			}
 		} else {
 			echo $mysqli->error;
+		}
+
+		$content = getFeedXML($urls);
+		$count = count($content);
+		for($i=0; $i<$count;$i++) {
+			getFeed_entries($id[$i], $content[$i],$owner,$folders[$i],$dates[$i]);
 		}
 		
 		$mysqli->close();
 		
 	}
+
+
+	function getFeedXML($urls) {
+		$mh = curl_multi_init();
+
+		foreach($urls as $url) {
+			$ch_new = curl_init();
+			curl_setopt($ch_new,CURLOPT_URL,$url);
+			curl_setopt($ch_new,CURLOPT_HEADER,0);
+			curl_setopt($ch_new,CURLOPT_RETURNTRANSFER,1);
+			$chs[] = $ch_new;
+			curl_multi_add_handle($mh,$ch_new);
+		}
+
+		$running=null;
+		do{
+			curl_multi_exec($mh,$running);
+		} while($running > 0);
+
+		foreach($chs as $ch) {
+			$content[] = curl_multi_getcontent($ch);
+		}
+
+		return $content;
+	}
+
 
 
 	function read_db_config() {
