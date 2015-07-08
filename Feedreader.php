@@ -24,6 +24,7 @@
 			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
 			time{position:absolute; right:12%;}
+			.folder{margin-top: 4%; font-weight: bold;}
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
