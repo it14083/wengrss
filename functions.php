@@ -12,6 +12,7 @@
 		9: mark Read
 		10: updateSettings
 		11: remove 
+		12: move to folder
 	
 	*/
 	if(isset($_POST['json'])){
@@ -152,6 +153,12 @@
 				}
 				break;
 				
+			case 12:
+				$id = $daten[1];
+				$folder = $daten[2];
+				move_to_folder($mysqli, $id, $folder);
+				break;
+				
 		}
 		$mysqli->close();
 		echo $return;
@@ -264,7 +271,12 @@
 	}
 
 	function move_to_folder($mysqli, $id, $folder) {
-		$query = "UPDATE feed_entries SET folder='$folder' WHERE id='$id'";
+		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+		
+		$query = "UPDATE feed_entries SET folder='$folder' WHERE feedid='$id'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
@@ -277,7 +289,7 @@
 		$folder = "";
 		$read = "AND marked_read='0'";
 		$limit = $_SESSION['articles_per_page'];
-
+		
 		if(isset($_SESSION['feed'])) {
 			$feedid = $_SESSION['feed'];
 			$feedid = "AND feedid='$feedid'";

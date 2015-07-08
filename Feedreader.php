@@ -25,6 +25,7 @@
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
 			time{position:absolute; right:12%;}
 			.folder{margin-top: 4%; font-weight: bold;}
+			.drag{min-height:100px;}
 			
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
@@ -38,27 +39,6 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		
-		<script>
-			$(function(){
-				//$(".list-group-item.feed").css('border','3px solid black');
-				      
-				$(".list-group-item.feed").button().draggable({cancel:false, appendTo: ".drag", helper: "clone", revert:"invalid"});
-				$( ".drag" ).css('border','3px solid black');
-				$( ".drag").droppable({
-					activeClass: "ui-state-default",
-					hoverClass: "ui-state-hover",
-					accept: ":not(.ui-sortable-helper)",
-					drop: function( event, ui ) {
-						
-						//alert(ui.draggable.detach().attr("id"));
-						$(".list-group-item.feed").remove();
-						ui.draggable.detach().appendTo(this);
-					
-						//$( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
-					}});
-			});
-		</script>
-			
 	</head>
 
 	<?php
