@@ -178,6 +178,11 @@
 							<li><button type='button' id='remove' class='btn btn-default' aria-label='Left Align'>Remove </button></li>
 							<li><button type='button' id='changePW' class='btn btn-default' aria-label='Left Align' onClick="location.href='changePW.php'">Change PW</button></li>
 						</ul>
+
+					<button type='button' id='logout' class='btn btn-default' aria-label='Left Align' onClick="location.href='logout.php'">
+						<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span>
+					</button>
+
 				
 					<script>
 					$( "#NavButtons #checkRead" ).ready(function() {
