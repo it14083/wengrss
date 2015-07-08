@@ -19,7 +19,7 @@
 			#Folder{width:90%; margin-top:2%; margin-left:4%;}
 			#EingabeButtons{position:absolute; width:100%; margin-top:2%;}
 			#Add{width:87%; margin-left:9%;}
-			#ttLive, #anzFeeds{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
+			#ttLive, #anzFeeds, #checkRead{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove, #changePW{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
