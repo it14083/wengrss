@@ -42,7 +42,7 @@
 			<p><input type="password" name="oldpw" placeholder="Old Password">
 			<p><input type="password" name="pw" placeholder="New Password">
 			<p><input type="password" name="pw2" placeholder="Retype New Password">
-			<p><input type="submit" value="Change"></p>
+			<p><input type="submit" value="Change"><input type="button" value="Go Back" onClick="location.href='Feedreader.php'">
 		</form>
 	</div>
 
