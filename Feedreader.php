@@ -219,12 +219,12 @@
 						<?php
 							if($_SESSION['show_images'] == 0){
 								?>
-								document.getElementById("checkRead").checked=false;
+								document.getElementById("checkImages").checked=false;
 								<?php
 							}
 							else{
 								?>
-								document.getElementById("checkRead").checked=true;
+								document.getElementById("checkImages").checked=true;
 								<?php
 							}
 						?>
