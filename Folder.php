@@ -12,14 +12,17 @@
 	if($stmt = $mysqli->prepare($query)){
 		$stmt->execute();
 		$stmt->bind_result($folder);
+	echo "<ul class='sort'>";
 		while($stmt->fetch()){
-			echo "<button type='button' class='list-group-item folder' id='$folder'>".$folder."</button>";
+			echo "<li>";
+			echo "<button type='button' class='list-group-item folder' name='FeedButton' id='$folder'>".$folder."</button>";
+			
 			if($folder != "Favoriten" && $folder != "Alle"){
 				echo "<div id='URL-$folder' class='drag'>";
 				?>
 				<script>
 				$(function(){
-					$( "#Folder #URL-<?=$folder?>").css('border','3px solid black');
+					//$( "#Folder #URL-<?=$folder?>").css('border','3px solid black');
 					$( "#Folder #URL-<?=$folder?>").droppable({
 						activeClass: "ui-state-default",
 						hoverClass: "ui-state-hover",
@@ -61,7 +64,7 @@
 									});
 								*/
 									$(function(){
-										$("#menue .list-group-item.feed").button().draggable({cancel:false, appendTo: ".drag"});		
+										$("#menue .list-group-item.feed").button().draggable({cancel:false, appendTo: ".drag", revert:"invalid"});		
 				
 									});
 									$("#menue #<?=$id?>").click(function(){
@@ -118,7 +121,21 @@
 			
 			</script>
 			<?php
+			echo "</li>";
 		}
+	echo "</ul>";
+		
+		?>
+		<script>
+			$(function(){
+		
+				$('.sort').sortable({
+					handle: 'button',
+					cancel: ''
+				});
+			});
+		</script>
+		<?php
 	}
 	$mysqli->close();
 ?>

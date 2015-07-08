@@ -26,7 +26,9 @@
 			time{position:absolute; right:12%;}
 			.folder{margin-top: 4%; font-weight: bold;}
 			.drag{min-height:100px;}
+			.sort{position: absolute; left:-10%; width:100%; list-style-type:none; }
 			
+
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
 			
@@ -38,7 +40,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-		
+
 	</head>
 
 	<?php
@@ -119,10 +121,10 @@
 					</script>
 				</div></br></br>
 				<div id="Folder" class="list-group">
-					<?php
-					//Ausgabe der Ordner, Owner muss noch hinzugefügt werden
-					include("Folder.php")
-					?>
+						<?php
+						//Ausgabe der Ordner, Owner muss noch hinzugefügt werden
+							include("Folder.php")
+						?>
 				</div>
 			</div>
 			<div class="alert alert-danger" role="alert" id="Fehler"></div>
