@@ -40,10 +40,22 @@
 		
 		<script>
 			$(function(){
-				$(".list-group-item.feed").css('border','3px solid black');
+				//$(".list-group-item.feed").css('border','3px solid black');
 				      
-				$(".list-group-item.feed").button().draggable({cancel:false});
-				$( ".list-group-item.folder" ).droppable({});
+				$(".list-group-item.feed").button().draggable({cancel:false, appendTo: ".drag", helper: "clone", revert:"invalid"});
+				$( ".drag" ).css('border','3px solid black');
+				$( ".drag").droppable({
+					activeClass: "ui-state-default",
+					hoverClass: "ui-state-hover",
+					accept: ":not(.ui-sortable-helper)",
+					drop: function( event, ui ) {
+						
+						//alert(ui.draggable.detach().attr("id"));
+						$(".list-group-item.feed").remove();
+						ui.draggable.detach().appendTo(this);
+					
+						//$( "<li></li>" ).text( ui.draggable.text() ).appendTo( this );
+					}});
 			});
 		</script>
 			

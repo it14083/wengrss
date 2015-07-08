@@ -15,7 +15,7 @@
 		while($stmt->fetch()){
 			echo "<button type='button' class='list-group-item folder' id='$folder'>".$folder."</button>";
 			if($folder != "Favoriten" && $folder != "Alle"){
-				echo "<div id='URL-$folder'>";
+				echo "<div id='URL-$folder' class='drag'>";
 					echo"<p>";
 						$mysqlURL = db_connect();
 						$queryFeeds = "SELECT title, id FROM feeds WHERE folder='$folder' and owner='$owner'";
