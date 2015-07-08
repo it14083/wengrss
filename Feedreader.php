@@ -21,7 +21,7 @@
 			#Add{width:87%; margin-left:9%;}
 			#ttLive, #anzFeeds{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
-			#saveSettings, #remove{width:80%; margin-left:5%; margin-top:2%;}
+			#saveSettings, #remove, #changePW{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
 			time{position:absolute; right:12%;}
 			.folder{margin-top: 4%; font-weight: bold;}
@@ -176,7 +176,7 @@
 							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
 							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
 							<li><button type='button' id='remove' class='btn btn-default' aria-label='Left Align'>Remove </button></li>
-							
+							<li><button type='button' id='changePW' class='btn btn-default' aria-label='Left Align' onClick="location.href='changePW.php'">Change PW</button></li>
 						</ul>
 				
 					<script>
