@@ -217,7 +217,7 @@
 					});
 					$( "#NavButtons #checkImages" ).ready(function() {
 						<?php
-							if($_SESSION['show_images'] == 1){
+							if($_SESSION['show_images'] == 0){
 								?>
 								document.getElementById("checkRead").checked=false;
 								<?php
