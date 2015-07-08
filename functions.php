@@ -119,15 +119,16 @@
 			
 			case 10:
 				$checked = $daten[1];
+				$show_images = $daten[2];
 				$ttl = 14;
 				$anzFeeds = 10;
-				if(is_numeric($daten[2])){
-					$ttl = $daten[2];
-				}
 				if(is_numeric($daten[3])){
-					$anzFeeds = $daten[3];
+					$ttl = $daten[3];
 				}
-				update_settings($mysqli, $_SESSION['uid'], $ttl, $anzFeeds, $checked);
+				if(is_numeric($daten[4])){
+					$anzFeeds = $daten[4];
+				}
+				update_settings($mysqli, $_SESSION['uid'], $ttl, $anzFeeds, $checked, $show_images);
 				//echo $ttl;
 				break;
 			
@@ -237,7 +238,7 @@
 
 	}
 
-	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all) {
+	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all, $show_images) {
 
 		if(is_nan($ttl)) {
 			$ttl = 14;
@@ -254,8 +255,9 @@
 		$_SESSION['ttl'] = $ttl;
 		$_SESSION['articles_per_page'] = $articles_per_page;
 		$_SESSION['show_all'] = $show_all;
+		$_SESSION['show_images'] = $show_images;
 
-		$query = "UPDATE settings SET time_to_live='$ttl', articles_per_page='$articles_per_page', show_all='$show_all' WHERE owner='$owner'";
+		$query = "UPDATE settings SET time_to_live='$ttl', articles_per_page='$articles_per_page', show_all='$show_all', show_images='$show_images' WHERE owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 		}
@@ -653,14 +655,15 @@
 	}
 
 	function load_settings($mysqli,$name) {
-		$query = "SELECT time_to_live,articles_per_page,show_all FROM settings WHERE owner='$name'";
+		$query = "SELECT time_to_live,articles_per_page,show_all,show_images FROM settings WHERE owner='$name'";
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
-			$stmt->bind_result($ttl,$app,$show_all);
+			$stmt->bind_result($ttl,$app,$show_all,$show_images);
 			if($stmt->fetch()) {
 				$_SESSION['ttl'] = $ttl;
 				$_SESSION['articles_per_page'] = $app;
 				$_SESSION['show_all'] = $show_all;
+				$_SESSION['show_images'] = $show_images;
 			}
 		} else {
 			echo $mysqli->error;

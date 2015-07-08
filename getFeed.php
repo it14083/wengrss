@@ -41,6 +41,11 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 			$stmt->bind_result($id, $title, $url, $description, $date);
 			$color = 0;
 			while($stmt->fetch()){
+
+				if(!$_SESSION['show_images']) {
+					$description = preg_replace("/<img[^>]+\>/i", "", $description);
+				}
+
 				if($color == 0){
 					$color = 1;
 				}

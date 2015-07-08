@@ -19,7 +19,7 @@
 			#Folder{width:90%; margin-top:2%; margin-left:4%;}
 			#EingabeButtons{position:absolute; width:100%; margin-top:2%;}
 			#Add{width:87%; margin-left:9%;}
-			#ttLive, #anzFeeds, #checkRead{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
+			#ttLive, #anzFeeds, #checkRead #checkImages{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove, #changePW{width:80%; margin-left:5%; margin-top:2%;}
 			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
@@ -186,6 +186,7 @@
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 							<li>Unread only <input type="checkbox" id="checkRead"></input></li>
+							<li>Show Images<input type="checkbox" id="checkImages"></input></li>
 							<li>Show Feeds <input type="text" id="anzFeeds" value="<?=$_SESSION['articles_per_page'] ?>"> </input></li>
 							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
 							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
@@ -214,6 +215,21 @@
 						?>
 						
 					});
+					$( "#NavButtons #checkImages" ).ready(function() {
+						<?php
+							if($_SESSION['show_images'] == 1){
+								?>
+								document.getElementById("checkRead").checked=false;
+								<?php
+							}
+							else{
+								?>
+								document.getElementById("checkRead").checked=true;
+								<?php
+							}
+						?>
+						
+					});
 					$( "#NavButtons #saveSettings" ).click(function() {
 						var checked = document.getElementById("checkRead").checked;
 						if(checked){
@@ -222,10 +238,11 @@
 						else{
 							checked = 1;
 						}
+						var show_images = document.getElementById("checkImages").checked;
 						var ttl = document.getElementById("ttLive").value;
 						var anzFeeds = document.getElementById("anzFeeds").value;
 						
-						var feld = new Array("10", checked, ttl, anzFeeds);
+						var feld = new Array("10", checked, show_images, ttl, anzFeeds);
 						data = JSON.stringify(feld);
 						var request = new XMLHttpRequest();
 						request.open('post', 'functions.php', true);
