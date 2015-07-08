@@ -145,7 +145,7 @@
 			</script>
 			<div id="Navbar">
 				<div id="NavButtons">
-					<button type='button' id="allRead" class='btn btn-default' aria-label='Left Align'>
+					<button type='button' id="allRead" title='Mark all displayed Articles as read' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
 					</button>
 					
@@ -165,11 +165,11 @@
 
 						});
 					</script>
-					<button type='button' id="refresh" class='btn btn-default' aria-label='Left Align' onclick='refresh();'>
+					<button type='button' id="refresh" title='Update all feeds' class='btn btn-default' aria-label='Left Align' onclick='refresh();'>
 						<span class=' glyphicon glyphicon-refresh' aria-hidden='true'></span>
 					</button>
 					
-						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" title='Settings' data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 							<span class="glyphicon glyphicon-cog"></span>
 						</button>
 						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
@@ -181,7 +181,7 @@
 							<li><button type='button' id='changePW' class='btn btn-default' aria-label='Left Align' onClick="location.href='changePW.php'">Change PW</button></li>
 						</ul>
 
-					<button type='button' id='logout' class='btn btn-default' aria-label='Left Align' onClick="location.href='logout.php'">
+					<button type='button' id='logout' title='Logout' class='btn btn-default' aria-label='Left Align' onClick="location.href='logout.php'">
 						<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span>
 					</button>
 

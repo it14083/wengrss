@@ -51,10 +51,10 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 				echo "<div id='Ausgabe' class='Ausgabe".$id."'>";
 					echo "<p><a href='".$url."' title='".$title."' target='_blank'>" .$title."</a><time>".$date."</time></p>";
 					echo"<div id='Buttons'>";
-						echo"<button type='button' id='delete' class='btn btn-default' aria-label='Left Align'>";
+						echo"<button type='button' id='delete' title='Mark as read' class='btn btn-default' aria-label='Left Align'>";
 							echo"<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
 						echo"</button>";
-						echo"<button type='button' id='favorite' class='btn btn-default'  aria-label='Left Align'>";
+						echo"<button type='button' id='favorite' title='Mark as favorite' class='btn btn-default'  aria-label='Left Align'>";
 							echo"<span class='glyphicon glyphicon-star' aria-hidden='true'></span>";
 						echo"</button>";
 						?>
