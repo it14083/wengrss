@@ -54,6 +54,7 @@
          $query = "CREATE TABLE `folders` (
                      `owner` varchar(32) NOT NULL,
                      `name` varchar(32) NOT NULL,
+					 `id` int(32) NOT NULL,
                      `collapsed` tinyint(1) NOT NULL
                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
          if($stmt = $mysqli->prepare($query)) {
