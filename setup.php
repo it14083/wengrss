@@ -83,6 +83,15 @@
 				$stmt->execute();
 			}
 
+			
+			$query = "CREATE TABLE `cookies` (
+						`name` varchar(32) NOT NULL,
+						`nummer` int(11) NOT NULL,
+						`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+			if($stmt = $mysqli->prepare($query)) {
+				$stmt->execute();
+			}
 
 			$mysqli->close();
 
