@@ -232,7 +232,7 @@
 						});
 						
 						$( "#NavFilter #Favoriten" ).click(function() {
-												
+
 							derOrdner = $("#NavFilter #Favoriten").attr("id");
 							var feld = new Array("4", derOrdner);
 							data = JSON.stringify(feld);
