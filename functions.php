@@ -629,14 +629,13 @@
 			$stmt->execute();
 		}
 		
-		add_folder($mysqli, $name, "Alle");
 		add_folder($mysqli, $name, "Default");
-		add_folder($mysqli, $name, "Favoriten");
 
 		return true;
 
 	}
 
+	
 	function login_user($mysqli,$name,$pw) {
 		$name = $mysqli->escape_string($name);
 		$query = "SELECT password,salt FROM users WHERE name='$name'";
