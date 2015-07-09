@@ -36,8 +36,9 @@
 	   } else if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
 		   session_start();
 		   $_SESSION['uid'] = $_POST['login'];
-
-			set_cookie($mysqli,$_SESSION['uid']);
+			if(isset($_POST['cookie'])) {
+				set_cookie($mysqli,$_SESSION['uid']);
+			}
 
 		   load_settings($mysqli,$_SESSION['uid']);
 	   		$mysqli->close();
@@ -55,6 +56,7 @@
 	  <form action="index.php" method="POST">
 		  <p><input type="text" name="login" placeholder="Username">
 		  <p><input type="password" name="password" placeholder="Password">
+		  <p><input type="checkbox" name="cookie">Remember me
 		  <p><input type="submit" value="Login"><input type="button" value="Register" onClick="location.href='register.php'">
 	  </form>
    </div>
