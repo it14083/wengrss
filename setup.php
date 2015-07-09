@@ -77,12 +77,21 @@
   					`time_to_live` smallint(6) NOT NULL DEFAULT '14',
    					`articles_per_page` tinyint(4) NOT NULL DEFAULT '10',
     				`show_all` tinyint(1) NOT NULL DEFAULT '0',
-						`show_images` tinyint(4) NOT NULL DEFAULT '1'
+					`show_images` tinyint(1) NOT NULL DEFAULT '1'
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 			if($stmt = $mysqli->prepare($query)) {
 				$stmt->execute();
 			}
 
+			
+			$query = "CREATE TABLE `cookies` (
+						`name` varchar(32) NOT NULL,
+						`nummer` int(11) NOT NULL,
+						`date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+			if($stmt = $mysqli->prepare($query)) {
+				$stmt->execute();
+			}
 
 			$mysqli->close();
 

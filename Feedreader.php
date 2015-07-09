@@ -22,12 +22,13 @@
 			#ttLive, #anzFeeds, #checkRead, #checkImages{position:absolute; left:65%; width:20%; margin-left:2%; margin-bottom:5%;}
 			li{margin-bottom:5%; margin-top: 5%; margin-left:5%;}
 			#saveSettings, #remove, #changePW{width:80%; margin-left:5%; margin-top:2%;}
-			#Fehler, #Success{position: absolute; top:12%; margin-left:28%; width:50%; height:8%; text-align:center;}
+			#Fehler, #Success{position: absolute; top:12%; margin-left:32%; width:45%; height:8%; text-align:center;}
 			time{position:absolute; right:12%;}
 			.folder{margin-top: 4%; font-weight: bold;}
 			.drag{min-height:100px;}
 			.sort{position: absolute; left:-10%; width:100%; list-style-type:none; }
-			
+			#NavSettings{position:absolute; right:2%; top:5%;}
+			#Navfilter{position:absolute; left:5%;}			
 
 			
 			<!--.button{background-image:url("Klick.jpg"); margin-left:5px; background-repeat:no-repeat; margin: 0 2em; padding: .2em .5em; background-position: .5em center; padding-left: 3em; background:none transparent;}-->
@@ -64,6 +65,73 @@
 		
 			<div id="header">
 				<h1> Feedreader </h1>
+				<div id="NavSettings">
+					<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" title='Settings' data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							<span class="glyphicon glyphicon-cog"></span>
+						</button>
+						<ul class="dropdown-menu pull-right" aria-labelledby="dropdownMenu1">
+							<li>Unread only <input type="checkbox" id="checkRead"></input></li>
+							<li>Show Images<input type="checkbox" id="checkImages"></input></li>
+							<li>Show Feeds <input type="text" id="anzFeeds" value="<?=$_SESSION['articles_per_page'] ?>"> </input></li>
+							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
+							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
+							<!--<li><button type='button' id='remove' class='btn btn-default' aria-label='Left Align'>Remove </button></li>-->
+							<li><button type='button' id='changePW' class='btn btn-default' aria-label='Left Align' onClick="location.href='changePW.php'">Change PW</button></li>
+						</ul>
+
+					<button type='button' id='logout' title='Logout' class='btn btn-default' aria-label='Left Align' onClick="location.href='logout.php'">
+						<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span>
+					</button>
+					
+					<script>
+						$( "#NavSettings #checkImages" ).ready(function() {
+						<?php
+							if($_SESSION['show_images'] == 0){
+								?>
+								document.getElementById("checkImages").checked=false;
+								<?php
+							}
+							else{
+								?>
+								document.getElementById("checkImages").checked=true;
+								<?php
+							}
+						?>
+						
+					});
+					$( "#NavSettings #saveSettings" ).click(function() {
+						var checked = document.getElementById("checkRead").checked;
+						if(checked){
+							checked = 0;
+						}
+						else{
+							checked = 1;
+						}
+						var show_images = document.getElementById("checkImages").checked;
+						var ttl = document.getElementById("ttLive").value;
+						var anzFeeds = document.getElementById("anzFeeds").value;
+						
+						var feld = new Array("10", checked, show_images, ttl, anzFeeds);
+						data = JSON.stringify(feld);
+						var request = new XMLHttpRequest();
+						request.open('post', 'functions.php', true);
+						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+						request.send('json='+data);
+						request.onreadystatechange = function() {
+							if (request.readyState==4 && request.status==200){
+								//alert(request.responseText);
+								$( "#wrapper #Success" ).empty();
+								$( "#wrapper #Success" ).text("Saved Settings!");
+								$( "#wrapper #Success" ).show();
+								$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
+								$("#main").load("getFeed.php");
+							}
+						}
+						
+					});
+					</script>
+				
+				</div>
 			</div>
 			
 			<div id="menue">
@@ -107,7 +175,7 @@
 											$( "#wrapper #Fehler" ).text("URL alreadys exists");
 										}
 										else if(request.responseText == "empty"){
-											$( "#wrapper #Fehler" ).text("adfafs");
+											$( "#wrapper #Fehler" ).text("Input a URL and/or folder");
 										}
 										$( "#wrapper #Fehler" ).show();
 										$( "#wrapper #Fehler" ).delay(3000).fadeOut("slow");
@@ -138,7 +206,53 @@
 				});
 			</script>
 			<div id="Navbar">
-				<div id="NavButtons">
+				<div id="NavFilter">
+					<button type='button' id="Alle" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+						<span class='glyphicon glyphicon-home' aria-hidden='true'></span>
+					</button>
+					<button type='button' id="Favoriten" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+						<span class='glyphicon glyphicon-star' aria-hidden='true'></span>
+					
+					<script>
+						$( "#NavFilter #Alle" ).click(function() {
+												
+							derOrdner = $("#NavFilter #Alle").attr("id");
+							var feld = new Array("4", derOrdner);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									$("#main").load("getFeed.php");;
+								}
+							}
+							
+						});
+						
+						$( "#NavFilter #Favoriten" ).click(function() {
+												
+							derOrdner = $("#NavFilter #Favoriten").attr("id");
+							var feld = new Array("4", derOrdner);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
+							request.onreadystatechange = function() {
+								if (request.readyState==4 && request.status==200){
+									$("#main").load("getFeed.php");;
+								}
+							}
+							
+						});
+					</script>
+					</button>
+				
+				</div>
+				<div id="NavButtons">					
+					
 					<button type='button' id="allRead" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>
 					</button>
@@ -163,22 +277,11 @@
 						<span class=' glyphicon glyphicon-refresh' aria-hidden='true'></span>
 					</button>
 					
-						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" title='Settings' data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-							<span class="glyphicon glyphicon-cog"></span>
-						</button>
-						<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-							<li>Unread only <input type="checkbox" id="checkRead"></input></li>
-							<li>Show Images<input type="checkbox" id="checkImages"></input></li>
-							<li>Show Feeds <input type="text" id="anzFeeds" value="<?=$_SESSION['articles_per_page'] ?>"> </input></li>
-							<li>Time to live <input type="text" id="ttLive" value="<?=$_SESSION['ttl'] ?>"> </input></li>
-							<li><button type='button' id="saveSettings" class='btn btn-default' aria-label='Left Align'>Save Settings</button></li>
-							<li><button type='button' id='remove' class='btn btn-default' aria-label='Left Align'>Remove </button></li>
-							<li><button type='button' id='changePW' class='btn btn-default' aria-label='Left Align' onClick="location.href='changePW.php'">Change PW</button></li>
-						</ul>
-
-					<button type='button' id='logout' title='Logout' class='btn btn-default' aria-label='Left Align' onClick="location.href='logout.php'">
-						<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span>
+					<button type='button' id="ButtonDelete" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+						<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
 					</button>
+					
+						
 
 				
 					<script>
@@ -197,51 +300,7 @@
 						?>
 						
 					});
-					$( "#NavButtons #checkImages" ).ready(function() {
-						<?php
-							if($_SESSION['show_images'] == 0){
-								?>
-								document.getElementById("checkImages").checked=false;
-								<?php
-							}
-							else{
-								?>
-								document.getElementById("checkImages").checked=true;
-								<?php
-							}
-						?>
-						
-					});
-					$( "#NavButtons #saveSettings" ).click(function() {
-						var checked = document.getElementById("checkRead").checked;
-						if(checked){
-							checked = 0;
-						}
-						else{
-							checked = 1;
-						}
-						var show_images = document.getElementById("checkImages").checked;
-						var ttl = document.getElementById("ttLive").value;
-						var anzFeeds = document.getElementById("anzFeeds").value;
-						
-						var feld = new Array("10", checked, show_images, ttl, anzFeeds);
-						data = JSON.stringify(feld);
-						var request = new XMLHttpRequest();
-						request.open('post', 'functions.php', true);
-						request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-						request.send('json='+data);
-						request.onreadystatechange = function() {
-							if (request.readyState==4 && request.status==200){
-								//alert(request.responseText);
-								$( "#wrapper #Success" ).empty();
-								$( "#wrapper #Success" ).text("Saved Settings!");
-								$( "#wrapper #Success" ).show();
-								$( "#wrapper #Success" ).delay(3000).fadeOut('slow');
-								$("#main").load("getFeed.php");
-							}
-						}
-						
-					});
+					
 					$( "#NavButtons #refresh" ).click(function() {
 						var feld = new Array("5");
 						data = JSON.stringify(feld);
@@ -259,7 +318,7 @@
 							}
 						}
 					});
-					$( "#NavButtons #remove" ).click(function() {
+					$( "#NavButtons #ButtonDelete" ).click(function() {
 						var feld = new Array("11");
 						data = JSON.stringify(feld);
 						var request = new XMLHttpRequest();

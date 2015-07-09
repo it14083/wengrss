@@ -453,6 +453,7 @@
 			curl_setopt($ch_new,CURLOPT_URL,$url);
 			curl_setopt($ch_new,CURLOPT_HEADER,0);
 			curl_setopt($ch_new,CURLOPT_RETURNTRANSFER,1);
+			curl_setopt($ch_new, CURLOPT_SSL_VERIFYPEER, false);
 			$chs[] = $ch_new;
 			curl_multi_add_handle($mh,$ch_new);
 		}
@@ -487,8 +488,10 @@
 		$url = $mysqli->escape_string($url);
 		$folder = $mysqli->escape_string($folder);
 		
+		$urls[] = $url;
+		$xml_content = getFeedXML($urls);
 		$xml = new DOMDocument("1.0");
-		$xml->load($url);
+		$xml->loadXML($xml_content[0]);
 
 		$feed = $xml->getElementsByTagName("title");
 		$title = extract_data($feed);
@@ -567,32 +570,16 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 			$stmt->bind_result($id);
-			if($stmt->fetch()){
-				while($stmt->fetch()) {
+			while($stmt->fetch()) {
 				$id_arr[] = $id;
-				}
+			}
 
-				foreach($id_arr as $id) {
-					move_feed_to_folder($mysqli,$id,"Default");
-				}
+			foreach($id_arr as $id) {
+				move_to_folder($mysqli,$id,"Default");
 			}
 		}
 	}
 
-	function move_feed_to_folder($mysqli,$id,$folder) {
-		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		} else {
-			echo $mysqli->error;
-		}
-
-		$query = "UPDATE feed_entries SET folder='$folder' WHERE feedid='$id'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		}
-	}
-	
 	function folderSession($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
 		$_SESSION['folder'] = $folder;
@@ -642,14 +629,13 @@
 			$stmt->execute();
 		}
 		
-		add_folder($mysqli, $name, "Alle");
 		add_folder($mysqli, $name, "Default");
-		add_folder($mysqli, $name, "Favoriten");
 
 		return true;
 
 	}
 
+	
 	function login_user($mysqli,$name,$pw) {
 		$name = $mysqli->escape_string($name);
 		$query = "SELECT password,salt FROM users WHERE name='$name'";
@@ -716,6 +702,43 @@
 			return $stmt->execute();
 		}
 		return false;
+	}
+
+	function set_cookie($mysqli, $owner) {
+		$nummer = rand();
+		setcookie("wengrss",$owner . " " . $nummer, time()+60*60*24*14);
+		$query = "INSERT INTO cookies (name, nummer) VALUES('$owner','$nummer')";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+	}
+
+	function delete_cookie($mysqli, $owner, $cookie) {
+		$query = "DELETE FROM cookies WHERE nummer='$cookie' AND name='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		} else {
+			$mysqli->error;
+		}
+	}
+
+	function login_with_cookie($mysqli,$owner,$cookie) {
+		$query = "SELECT * FROM cookies WHERE name='$owner' AND nummer='$cookie'";
+		$success = false;
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$success = $stmt->fetch();
+		} else {
+			echo $mysqli->error;
+		}
+
+		$new_mysqli = db_connect();
+		if($success) {
+			delete_cookie($new_mysqli,$owner,$cookie);
+			set_cookie($new_mysqli, $owner);
+		}
+		$new_mysqli->close();
+		return $success;
 	}
 
 ?>
