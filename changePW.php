@@ -2,6 +2,7 @@
 <head>
 	<title>Change Password</title>
 	<link rel="stylesheet" href="css/style.css">
+	<link rel="shortcut icon" href="./res/favicon.ico">
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 </head>
 <body>
