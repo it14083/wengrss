@@ -453,6 +453,7 @@
 			curl_setopt($ch_new,CURLOPT_URL,$url);
 			curl_setopt($ch_new,CURLOPT_HEADER,0);
 			curl_setopt($ch_new,CURLOPT_RETURNTRANSFER,1);
+			curl_setopt($ch_new, CURLOPT_SSL_VERIFYPEER, false);
 			$chs[] = $ch_new;
 			curl_multi_add_handle($mh,$ch_new);
 		}
@@ -487,8 +488,10 @@
 		$url = $mysqli->escape_string($url);
 		$folder = $mysqli->escape_string($folder);
 		
+		$urls[] = $url;
+		$xml_content = getFeedXML($urls);
 		$xml = new DOMDocument("1.0");
-		$xml->load($url);
+		$xml->loadXML($xml_content[0]);
 
 		$feed = $xml->getElementsByTagName("title");
 		$title = extract_data($feed);
