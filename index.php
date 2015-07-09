@@ -14,26 +14,42 @@
 		   exit();
 	   }
 
-	   if(isset($_POST['login']) && isset($_POST['password'])) {
-		   $mysqli = db_connect();
+	$mysqli = db_connect();
+	if(isset($_COOKIE['wengrss'])) {
+		$arr = split(" ", $_COOKIE['wengrss']);
+		$name = $arr[0];
+		$cookie = $arr[1];
+	 	if(login_with_cookie($mysqli,$name,$cookie)) {
+			session_start();
+			$_SESSION['uid'] = $name;
+			load_settings($mysqli,$name);
+			$mysqli->close();
+			header('Location: Feedreader.php');
+			exit();
+		}
+	}
+	
+	if(isset($_POST['login']) && isset($_POST['password'])) {
+		if($mysqli->connect_errno) {
+			$login_failed = "Failed to connect to MySQL: " . $mysqli->connect_error;
+			$mysqli->close();
+	   } else if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
+		   session_start();
+		   $_SESSION['uid'] = $_POST['login'];
 
-			if($mysqli->connect_errno) {
-				$login_failed = "Failed to connect to MySQL: " . $mysqli->connect_error;
-				$mysqli->close();
-		   } else if(login_user($mysqli, $_POST['login'], $_POST['password'])) {
-			   session_start();
-			   $_SESSION['uid'] = $_POST['login'];
-			   load_settings($mysqli,$_SESSION['uid']);
-		   		$mysqli->close();
-			   header('Location: Feedreader.php');
-			   exit(); 
-		   } else {
-		   		$login_failed = "Wrong Password or Username";
-				$mysqli->close();
-			}
+			set_cookie($mysqli,$_SESSION['uid']);
+
+		   load_settings($mysqli,$_SESSION['uid']);
+	   		$mysqli->close();
+		   header('Location: Feedreader.php');
+		   exit(); 
+	   } else {
+	   		$login_failed = "Wrong Password or Username";
+			$mysqli->close();
+		}
+	  
 	   
-		   
-	   }
+	 }
 ?>
    <div class="container">
 	  <form action="index.php" method="POST">
