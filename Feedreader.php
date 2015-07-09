@@ -207,10 +207,10 @@
 			</script>
 			<div id="Navbar">
 				<div id="NavFilter">
-					<button type='button' id="Alle" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+					<button type='button' id="Alle" title='Show all feeds' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-home' aria-hidden='true'></span>
 					</button>
-					<button type='button' id="Favoriten" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+					<button type='button' id="Favoriten" title='Show favourites' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-star' aria-hidden='true'></span>
 					
 					<script>
@@ -277,7 +277,7 @@
 						<span class=' glyphicon glyphicon-refresh' aria-hidden='true'></span>
 					</button>
 					
-					<button type='button' id="ButtonDelete" title='Mark all displayed articles as read' class='btn btn-default' aria-label='Left Align'>
+					<button type='button' id="ButtonDelete" title='Delete Folder/Feed' class='btn btn-default' aria-label='Left Align'>
 						<span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
 					</button>
 					
