@@ -15,15 +15,13 @@
 	echo "<ul class='sort'>";
 		while($stmt->fetch()){
 			echo "<li>";
-			echo "<button type='button' class='list-group-item folder' name='FeedButton' id='$folder'>".$folder."</button>";
-			
-			if($folder != "Favoriten" && $folder != "Alle"){
-				echo "<div id='URL-$folder' class='drag'>";
-				?>
-				<script>
+			echo "<div id='Wrapper-$folder' class='wrapper'>";
+			?>
+			<script>
 				$(function(){
-					//$( "#Folder #URL-<?=$folder?>").css('border','3px solid black');
-					$( "#Folder #URL-<?=$folder?>").droppable({
+					//$( "#Folder #Wrapper-<?=$folder?>").css('border','3px solid black');
+					
+					$( "#Folder #Wrapper-<?=$folder?>").droppable({
 						activeClass: "ui-state-default",
 						hoverClass: "ui-state-hover",
 						accept: ":not(.ui-sortable-helper)",
@@ -44,9 +42,15 @@
 							}
 						
 					}});
+					
 				});
-				</script>
-				<?php
+			</script>
+			<?php
+			echo "<button type='button' class='list-group-item folder' name='FeedButton' id='$folder'>".$folder."</button>";
+			
+			if($folder != "Favoriten" && $folder != "Alle"){
+				echo "<div id='URL-$folder'>";
+				
 					echo"<p>";
 						$mysqlURL = db_connect();
 						$queryFeeds = "SELECT title, id FROM feeds WHERE folder='$folder' and owner='$owner'";
@@ -64,7 +68,7 @@
 									});
 								*/
 									$(function(){
-										$("#menue .list-group-item.feed").button().draggable({cancel:false, appendTo: ".drag", revert:"invalid"});		
+										$("#menue .list-group-item.feed").button().draggable({cancel:false, appendTo: ".wrapper", revert:"invalid"});		
 				
 									});
 									$("#menue #<?=$id?>").click(function(){
@@ -100,6 +104,7 @@
 					$("#Folder #URL-<?=$folder?>").hide();
 				
 					$( "#Folder #<?=$folder?>" ).click(function() {
+						
 						$("#Folder #URL-<?=$folder?>").slideToggle();
 							derOrdner = $("#Folder #<?=$folder?>").attr("id");
 							var feld = new Array("4", derOrdner);
@@ -121,6 +126,7 @@
 			
 			</script>
 			<?php
+			echo "</div>";
 			echo "</li>";
 		}
 	echo "</ul>";
