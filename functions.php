@@ -567,32 +567,16 @@
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 			$stmt->bind_result($id);
-			if($stmt->fetch()){
-				while($stmt->fetch()) {
+			while($stmt->fetch()) {
 				$id_arr[] = $id;
-				}
+			}
 
-				foreach($id_arr as $id) {
-					move_feed_to_folder($mysqli,$id,"Default");
-				}
+			foreach($id_arr as $id) {
+				move_to_folder($mysqli,$id,"Default");
 			}
 		}
 	}
 
-	function move_feed_to_folder($mysqli,$id,$folder) {
-		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		} else {
-			echo $mysqli->error;
-		}
-
-		$query = "UPDATE feed_entries SET folder='$folder' WHERE feedid='$id'";
-		if($stmt = $mysqli->prepare($query)) {
-			$stmt->execute();
-		}
-	}
-	
 	function folderSession($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
 		$_SESSION['folder'] = $folder;
