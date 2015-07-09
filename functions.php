@@ -704,4 +704,41 @@
 		return false;
 	}
 
+	function set_cookie($mysqli, $owner) {
+		$nummer = rand();
+		setcookie("wengrss",$owner . " " . $nummer, time()+60*60*24*14);
+		$query = "INSERT INTO cookies (name, nummer) VALUES('$owner','$nummer')";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
+	}
+
+	function delete_cookie($mysqli, $owner, $cookie) {
+		$query = "DELETE FROM cookies WHERE nummer='$cookie' AND name='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		} else {
+			$mysqli->error;
+		}
+	}
+
+	function login_with_cookie($mysqli,$owner,$cookie) {
+		$query = "SELECT * FROM cookies WHERE name='$owner' AND nummer='$cookie'";
+		$success = false;
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+			$success = $stmt->fetch();
+		} else {
+			echo $mysqli->error;
+		}
+
+		$new_mysqli = db_connect();
+		if($success) {
+			delete_cookie($new_mysqli,$owner,$cookie);
+			set_cookie($new_mysqli, $owner);
+		}
+		$new_mysqli->close();
+		return $success;
+	}
+
 ?>
