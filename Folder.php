@@ -137,7 +137,15 @@
 		
 				$('.sort').sortable({
 					handle: 'button',
-					cancel: ''
+					cancel: '',
+					
+					stop: function(event, ui) {
+						alert($('.sort li').length);
+						$( ".sort li" ).children().each(function( index ) {
+							alert($(this).attr("id").replace("Wrapper-",""));
+						});
+						//alert("New position: " + ui.item.index());
+					}
 				});
 			});
 		</script>
