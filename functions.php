@@ -13,6 +13,7 @@
 		10: updateSettings
 		11: remove 
 		12: move to folder
+		13: Set folder index
 	
 	*/
 	if(isset($_POST['json'])){
@@ -157,6 +158,12 @@
 				$id = $daten[1];
 				$folder = $daten[2];
 				move_to_folder($mysqli, $id, $folder);
+				break;
+			
+			case 13:
+				$folder = $daten[1];
+				$id = $daten[2];
+				setFolderID($mysqli, $folder, $id, $_SESSION['uid']);
 				break;
 				
 		}
@@ -549,7 +556,16 @@
 				}
 			}
 			if($nameTaken == 0){
-				$query = "INSERT INTO folders (owner, name) VALUES ('$owner','$folder')";
+				$query = "SELECT name FROM folders WHERE owner='$owner'";
+				$anzFeeds = 0;
+				if($stmt = $mysqli->prepare($query)) {
+					$stmt->execute();
+					$stmt->bind_result($name_taken);
+					while($stmt->fetch()) {
+						$anzFeeds++;
+					}
+				}
+				$query = "INSERT INTO folders (owner, name, id) VALUES ('$owner','$folder','$anzFeeds')";
 				if($stmt = $mysqli->prepare($query)) {
 					if($stmt->execute()) {
 						return true;
@@ -739,6 +755,13 @@
 		}
 		$new_mysqli->close();
 		return $success;
+	}
+	
+	function setFolderID($mysqli, $folder, $id, $owner){
+		$query = "UPDATE folders SET id='$id' WHERE name='$folder' AND owner='$owner'";
+		if($stmt = $mysqli->prepare($query)) {
+			$stmt->execute();
+		}
 	}
 
 ?>

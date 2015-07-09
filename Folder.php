@@ -8,7 +8,7 @@
 			session_start();
 	}
 	$owner = $_SESSION['uid'];
-	$query = "SELECT name FROM folders WHERE owner='$owner'";
+	$query = "SELECT name FROM folders WHERE owner='$owner' ORDER BY id";
 	if($stmt = $mysqli->prepare($query)){
 		$stmt->execute();
 		$stmt->bind_result($folder);
@@ -140,11 +140,16 @@
 					cancel: '',
 					
 					stop: function(event, ui) {
-						alert($('.sort li').length);
+						//alert($('.sort li').length);
 						$( ".sort li" ).children().each(function( index ) {
-							alert($(this).attr("id").replace("Wrapper-",""));
+							var folder = $(this).attr("id").replace("Wrapper-","");
+							var feld = new Array("13", folder, index);
+							data = JSON.stringify(feld);
+							var request = new XMLHttpRequest();
+							request.open('post', 'functions.php', true);
+							request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+							request.send('json='+data);
 						});
-						//alert("New position: " + ui.item.index());
 					}
 				});
 			});
