@@ -190,6 +190,11 @@
 			$item_tag = "entry";
 			$summary_tag = "summary";
 			$date_tag = "published";
+
+			$atom_content = $xml->getElementsByTagName("content");
+			if($atom_content->length > 0) {
+				$summary_tag = "content";
+			}
 		}
 
 		$items = $xml->getElementsByTagName($item_tag);
