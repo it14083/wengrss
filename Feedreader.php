@@ -151,7 +151,7 @@
 							var folder = document.getElementById("Folder").value;
 							//alert(document.getElementById("Eingabe").value);
 							
-							var feld = new Array("1", url, folder);
+							var feld = new Array("1", escape(url), folder);
 							data = JSON.stringify(feld);
 							var request = new XMLHttpRequest();
 							request.open('post', 'functions.php', true);
