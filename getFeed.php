@@ -27,6 +27,9 @@ $feed_url= "https://news.google.de/news?pz=1&cf=all&ned=de&hl=de&output=rss";
 	function printFeeds($limit, $read){
 		if(session_status() == PHP_SESSION_NONE){
 			session_start();
+			if(!isset($_SESSION['uid'])) {
+				echo "<b>Session expired</b>";
+			}
 		}
 		$owner = $_SESSION['uid'];
 		$mysqli = db_connect();
