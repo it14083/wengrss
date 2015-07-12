@@ -1,5 +1,8 @@
 <?php
 	/*
+
+	switch um die post requests zu verarbeiten
+
 	$_Post ID: 
 		1: add_feed
 		2: setRead
@@ -131,7 +134,6 @@
 					$anzFeeds = $daten[4];
 				}
 				update_settings($mysqli, $_SESSION['uid'], $ttl, $anzFeeds, $checked, $show_images);
-				//echo $ttl;
 				break;
 			
 			case 11:
@@ -172,8 +174,16 @@
 	
 	}
 
+
+	/*
+	traegt den uebergebenen feed in die Datenbank ein
+	@param int $id id des feeds in der datenbank
+	@param string $xml_string der runtergeladene feed
+	@param string $owner benutzer zu dem der feed gehoert
+	@param string $folder ordner in dem der feed steht
+	@param datum(Y-m-d H:M:S) $lastdate datum des juengsten Artikels aus dem Feed
+	*/
 	function getFeed_entries($id, $xml_string, $owner, $folder, $lastdate = 0) {
-		//$id = get_id($feed_url);
 		$youngest = $lastdate;
 
 		$mysqli = db_connect();
@@ -186,6 +196,7 @@
 		$summary_tag = "description";
 		$date_tag = "pubDate";
 
+		// falls der Feed in atom ist -> die tags anpassen
 		if($atom->length > 0) {
 			$item_tag = "entry";
 			$summary_tag = "summary";
@@ -212,11 +223,12 @@
 			$date = extract_data($item->getElementsByTagName($date_tag));
 			$date = strftime("%Y-%m-%d %H:%M:%S", strtotime($date));
 
+			// nur neue Artikel eintragen
 			if($date > $lastdate) {
 				add_feedentry($mysqli,$id,$title,$link,$summary,$date,$owner,$folder);
 			}
 
-
+			// nach dem juengsten Artikel suchen
 			if($date > $youngest) {
 				$youngest = $date;
 			}
@@ -225,13 +237,23 @@
 		$mysqli->close();
 	}
 
+	/*
+	gibt den Text aus dem ersten Kindelement vom xml item zurueck
+	@param xml_item $item
+	@return string text aus dem ersten Kindelement
+	*/
 	function extract_data($item) {
 		$tmp = $item->item(0);
 		$tmp = $tmp->firstChild->textContent;
 		return $tmp;
 	}
 
-	
+	/*
+	setzt das Datum des juengsten Artikels fuer den Feed
+	@param mysqli $mysqli
+	@param int $id id des Feeds
+	@param datum(Y-m-d H:M:S) $date neues Datum
+	*/
 	function update_lastupdated($mysqli,$id,$date) {
 		$query = "UPDATE feeds SET lastupdated='$date' WHERE id='$id'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -239,11 +261,17 @@
 		}
 	}
 
+	/*
+	markiert die angezeigten Feeds als gelesen
+	@param mysqli $mysqli
+	*/
 	function mark_page_read($mysqli) {
 		$query = build_query_select_feeds();
 		if($stmt = $mysqli->prepare($query)) {
 			$stmt->execute();
 			$stmt->bind_result($id,$title,$url,$desc,$date);
+
+			// wirklich nur die ungelesen Artikel markieren die auch angezeigt werden
 			$i = 0;
 			$to_mark = $_SESSION['articles_per_page'];
 			if($_SESSION['show_all'] == 0) {
@@ -257,6 +285,15 @@
 
 	}
 
+	/*
+	schreibt die Settings in die Datenbank
+	@param mysqli $mysqli
+	@param string $owner Benutzer zu dem die Settings gehoeren
+	@param int $ttl Zeit in Tagen die die Artikel in der Datenbank bleiben
+	@param int $articles_per_page Anzahl der Artikel die angezeigt werden
+	@param bool $show_all alle Artikel oder nur ungelesene anzeigen
+	@param bool $show_images sollen Bilder in Artikeln angezeigt werden
+	*/
 	function update_settings($mysqli, $owner, $ttl, $articles_per_page, $show_all, $show_images) {
 
 		if(is_nan($ttl)) {
@@ -282,6 +319,12 @@
 		}
 	}
 
+	/*
+	verschiebt einen Feed in einen Ordner
+	@param mysqli $mysqli
+	@param int $id id des Feeds
+	@param string $folder Ordner in den der Feed geschoben wird
+	*/
 	function move_to_folder($mysqli, $id, $folder) {
 		$query = "UPDATE feeds SET folder='$folder' WHERE id='$id'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -294,6 +337,11 @@
 		}
 	}
 
+	/*
+	baut abhaengig von den Settings einen query der die Artikel abruft
+	die angezeigt werden sollen
+	@return string
+	*/
 	function build_query_select_feeds() {
 		
 		$owner = $_SESSION['uid'];
@@ -332,6 +380,11 @@
 		return $query;
 	}
 
+	/*
+	loescht den Feed mit id und seine Artikel aus der Datenbank
+	@param mysqli $mysqli
+	@param int id Feed der geloescht wird
+	*/
 	function delete_feed($mysqli, $id) {
 		$query = "DELETE FROM feeds WHERE id='$id'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -343,7 +396,11 @@
 		}
 	}
 
-
+	/*
+	markiert eine Feed als Favorit/nicht-Favorit
+	@param int $idFav id des Artikel
+	@param bool $value Favorit
+	*/
 	function setFavorite($idFav, $value){
 		$mysqli = db_connect();
 		$query = "UPDATE feed_entries SET marked_fav='$value' WHERE id='$idFav'";
@@ -353,6 +410,11 @@
 		$mysqli->close();
 	}
 	
+	/*
+	gibt zurueck ob ein Artikel als Favorit markiert ist
+	@param int $idFav id des Artikels
+	@return bool
+	*/
 	function getFavorite($idFav){
 		$mysqli = db_connect();
 		$query = "SELECT marked_fav FROM feed_entries WHERE id='$idFav'";
@@ -366,6 +428,11 @@
 		$mysqli->close();
 	}
 	
+	/*
+	markiert einen Artikel als gelesen/ungelesen
+	@param int $feed_id id des Artikels
+	@param bool $value gelesen
+	*/
 	function setRead($feed_id, $value){
 		$mysqli = db_connect();
 		$query = "UPDATE feed_entries SET marked_read='$value' WHERE id='$feed_id'";
@@ -375,6 +442,11 @@
 		$mysqli->close();
 	}
 	
+	/*
+	gibt zurueck ob ein Artikel als gelesen markiert ist
+	@param int @feed_id id des Feeds
+	@return bool
+	*/
 	function getRead($feed_id){
 		$mysqli = db_connect();
 		$query = "SELECT marked_read FROM feed_entries WHERE id='$feed_id'";
@@ -388,6 +460,11 @@
 		$mysqli->close();
 	}
 	
+	/*
+	findet zu einer url die id in der Datenbank
+	@param string $url url des Feeds
+	@return int
+	*/
 	function get_id($url){
 		$mysqli = db_connect();
 		$owner = $_SESSION['uid'];
@@ -404,7 +481,11 @@
 		}
 		$mysqli->close();
 	}
-		
+	
+	/*
+	gibt eine Verbindung zur Datenbank zurueck
+	@return mysqli
+	*/
 	function db_connect() {
 
 		if(!defined("DB_USER") || !defined("DB") || !defined("DB_PW")) {
@@ -419,11 +500,14 @@
 		return $mysqli;
 	}
 
-
+	/*
+	loescht alte Artikel aus der Datenbank und holt sich die neuen Artikel
+	*/
 	function updateFeeds() {
 		$mysqli = db_connect();
 		$owner = $_SESSION['uid'];
 
+		// loescht Artikel die laenger als $ttl in der Datenbank sind
 		$ttl = $_SESSION['ttl'];
 		$oldest = strftime("%Y-%m-%d %H:%M:%S", strtotime("-$ttl day"));
 		$query = "DELETE FROM feed_entries WHERE owner='$owner' AND date<'$oldest' AND marked_fav='0'";
@@ -456,7 +540,11 @@
 		
 	}
 
-
+	/*
+	laedt den Inhalt aus $urls und gibt ihn zurueck
+	@param string[] $urls Array mit den urls die geladen werden sollen
+	@return string[]
+	*/
 	function getFeedXML($urls) {
 		$mh = curl_multi_init();
 
@@ -483,7 +571,9 @@
 	}
 
 
-
+	/*
+	liest die Datenbank-Konfiguration aus ./db.ini
+	*/
 	function read_db_config() {
 		$file = 'db.ini';
 		if($data = parse_ini_file($file)) {
@@ -495,6 +585,13 @@
 		}
 	}
 
+	/*
+	fuegt einen neuen Feed in die Datenbank ein
+	@param mysqli $mysqli
+	@param string @owner Benutzer zu dem der Feed gehoert
+	@param string $url url des Feeds
+	@param strign $folder Ordner in den der Feed eingefuegt wird
+	*/
 	function add_feed($mysqli,$owner,$url,$folder) {
 		$owner = $mysqli->escape_string($owner);
 		$url = $mysqli->escape_string($url);
@@ -517,6 +614,13 @@
 		return false;
 	}
 	
+	/*
+	kontrolliert ob der Feed schon existiert
+	@param mysqli $mysqli
+	@param string $owner Benutzer zu dem der Feed gehoert
+	@param string $url url des Feeds
+	@param string $folder Ordner in dem der Feed ist
+	*/
 	function check_feed($mysqli, $owner, $url, $folder){
 		$query = "SELECT url FROM feeds WHERE url='$url' AND owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -529,6 +633,16 @@
 		return true;	
 	}
 
+	/*
+	fuegt einen Artikel in die Datenbank ein
+	@param mysqli $mysqli
+	@param int $feedid id des Feeds zu dem der Artikel gehoert
+	@param string $tile Titel des Feeds
+	@param string $description Content des Artikels
+	@param datum(Y-m-d H:M:S) $date Datum des Artikels
+	@param string $owner Benutzer zu dem der Feed gehoert
+	@param string $folder Ordner aus dem der Feed ist
+	*/
 	function add_feedentry($mysqli,$feedid,$title,$url,$description,$date, $owner, $folder) {
 		$title = $mysqli->escape_string($title);
 		$url = $mysqli->escape_string($url);
@@ -547,6 +661,12 @@
 		return false;
 	}
 
+	/*
+	fuegt einen Ordner in die Datenbank ein
+	@param mysqli $mysqli
+	@param string $owner Benutzer zu dem der Ordner gehoert
+	@param string $folder Name des Ordners
+	*/
 	function add_folder($mysqli,$owner,$folder) {
 		$owner = $mysqli->escape_string($owner);
 		$folder = $mysqli->escape_string($folder);
@@ -581,6 +701,13 @@
 		}
 	}
 
+	/*
+	loescht einen Ordner aus der Datenbank und schiebt die Feeds aus dem Ordner
+	nach Default
+	@param mysqli $mysqli
+	@param string $owner
+	@param string $folder
+	*/
 	function delete_folder($mysqli, $owner, $folder) {
 		$query = "DELETE FROM folders WHERE owner='$owner' AND name='$folder'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -601,16 +728,28 @@
 		}
 	}
 
+	/*
+	setzt den Ordner dessen Feeds angezeigt werden sollen
+	@param string $folder Ordner dessen Feeds angezeigt werden sollen
+	*/
 	function folderSession($folder){
 		//Session Ordner schreiben, um den ausgewählten Ordner auszugeben
 		$_SESSION['folder'] = $folder;
 	}
 	
+	/*
+	setzt den Feed dessen Artikel angezeigt werden sollen
+	@param string $feed Feed dessen Artikel angezeigt werden sollen
+	*/
 	function feedSession($feed){
 		$_SESSION['feed'] = $feed;
 	}
 
-
+	/*
+	kontrolliert ob ein Benutzername schon vergeben ist
+	@param mysqli $mysqli
+	@param string $name
+	*/
 	function name_taken($mysqli, $name) {
 		$query = "SELECT name FROM users WHERE name='$name'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -627,6 +766,14 @@
 		return false;
 	}
 
+	/*
+	erstellt einen neuen Benutzer und legt Default Settings an
+	das passwort wird mit einem salt versehen und mit sha256 gehashed
+	@param mysqli $mysqli
+	@param string $name
+	@param string $email
+	@param stirng $pw
+	*/
 	function create_user($mysqli, $name, $email, $pw) {
 
 		$name = $mysqli->escape_string($name);
@@ -656,7 +803,13 @@
 
 	}
 
-	
+	/*
+	versucht einen Benutzer einzuloggen
+	@param mysqli $mysqli
+	@param string $name
+	@param string $pw
+	@return true on success
+	*/
 	function login_user($mysqli,$name,$pw) {
 		$name = $mysqli->escape_string($name);
 		$query = "SELECT password,salt FROM users WHERE name='$name'";
@@ -673,6 +826,11 @@
 		return false;
 	}
 
+	/*
+	laedt die Benutzer-Settings aus der Datenbank
+	@param mysqli $mysqli
+	@param string $name
+	*/
 	function load_settings($mysqli,$name) {
 		$query = "SELECT time_to_live,articles_per_page,show_all,show_images FROM settings WHERE owner='$name'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -689,10 +847,22 @@
 		}
 	}
 
+	/*
+	password hash mit salt
+	@param string $pw
+	@param string $salt
+	*/
 	function encrypt_password($pw, $salt) {
 		return hash('sha256',$pw . $salt);
 	}
 
+	/*
+	prueft ob das Passwort zum Benutzer passt
+	@param mysqli $mysqli
+	@param string $name
+	@param string $pw
+	@return true wenns passt
+	*/
 	function check_password($mysqli,$name,$pw) {
 		$query = "SELECT password,salt FROM users WHERE name='$name'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -707,6 +877,13 @@
 		return false;
 	}
 
+	/*
+	aendert das Benutzer-Passwort
+	@param mysqli $mysqli
+	@param string $name
+	@param string $pw
+	@return true wenns geaendert wurde
+	*/
 	function change_password($mysqli,$name,$pw) {
 		$pw = $mysqli->escape_string($pw);
 
@@ -725,6 +902,11 @@
 		return false;
 	}
 
+	/*
+	setzt ein Cookie mit Name und einer id und speichert die id in der Datenbank
+	@param mysqli $mysqli
+	@param string $owner
+	*/
 	function set_cookie($mysqli, $owner) {
 		$nummer = rand();
 		setcookie("wengrss",$owner . " " . $nummer, time()+60*60*24*14);
@@ -734,6 +916,12 @@
 		}
 	}
 
+	/*
+	loescht ein Cookie aus der Datenbank
+	@param mysqli $mysqli
+	@param string $owner
+	@param int $cookie id des cookies
+	*/
 	function delete_cookie($mysqli, $owner, $cookie) {
 		$query = "DELETE FROM cookies WHERE nummer='$cookie' AND name='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
@@ -743,6 +931,13 @@
 		}
 	}
 
+	/*
+	versucht einen login mit dem Benutzer und der id des Cookies
+	@param mysqli $mysqli
+	@param string $owner Name aus dem Cookie
+	@param int $cookie id aus dem Cookie
+	@return true wenns klappt
+	*/
 	function login_with_cookie($mysqli,$owner,$cookie) {
 		$query = "SELECT * FROM cookies WHERE name='$owner' AND nummer='$cookie'";
 		$success = false;
@@ -762,6 +957,13 @@
 		return $success;
 	}
 	
+	/*
+	setzt die Reihenfolge fuer die Ordneranzeige
+	@param mysqli $mysqli
+	@param string $folder
+	@param string $id
+	@param $owner
+	*/
 	function setFolderID($mysqli, $folder, $id, $owner){
 		$query = "UPDATE folders SET id='$id' WHERE name='$folder' AND owner='$owner'";
 		if($stmt = $mysqli->prepare($query)) {
