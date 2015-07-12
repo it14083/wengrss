@@ -12,16 +12,24 @@
 	session_start();
 
 	if(isset($_POST['oldpw']) && isset($_POST['pw']) && isset($_POST['pw2'])) {
+		
+		// pruefen ob die Passwoerter nicht leer sind
 		if($_POST['pw'] != "" && $_POST['pw2'] != "") {
 			$mysqli = db_connect();
 
 			if($mysqli->connect_errno) {
 				$error = "Failed to connect to MySQL: " . $mysqli->connect_error;
+
+			// pruefen ob das richtige bestehende Passwort eingegeben wurde
 			} else if(!check_password($mysqli,$_SESSION['uid'],$_POST['oldpw'])) {
 				$error = "Wrong Password";
+
+			// pruefen ob die beiden neu eingegeben Passwoerter uebereinstimmen
 			} else if($_POST['pw'] != $_POST['pw2']) {
 				$error = "New passwords dont match";
 				$mysqli->close();
+
+			// Passwort aendern
 			} else if(change_password($mysqli,$_SESSION['uid'],$_POST['pw'])) {
 				$mysqli->close();
 				echo "<div class=container>";
@@ -38,6 +46,8 @@
 		}
 	}
 ?>
+
+	<!-- Passwort Formular -->
 	<div class="container">
 		<form action="changePW.php" method="POST">
 			<p><input type="password" name="oldpw" placeholder="Old Password">
@@ -48,6 +58,7 @@
 	</div>
 
 <?php
+	// Fehler ausgeben
 	if(isset($error)) {
 		echo "<div class=container>";
 		echo "<div class=error>" . $error . "</div>";
